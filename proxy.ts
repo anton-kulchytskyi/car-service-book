@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/auth/jwt'
 
-const protectedRoutes = ['/dashboard', '/cars']
+const protectedRoutes = ['/dashboard', '/cars', '/profile']
 const authRoutes = ['/login', '/register']
 
 export async function proxy(req: NextRequest) {
@@ -34,5 +34,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/cars/:path*', '/login', '/register'],
+  matcher: ['/dashboard/:path*', '/cars/:path*', '/profile/:path*', '/profile', '/login', '/register'],
 }

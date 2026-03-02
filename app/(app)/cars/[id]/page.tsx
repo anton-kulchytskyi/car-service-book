@@ -9,7 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import RecordsList from '@/components/records-list'
 import DeleteCarButton from '@/components/delete-car-button'
-import { PlusIcon, ArrowLeftIcon, ReceiptIcon, GaugeIcon, ListIcon } from 'lucide-react'
+import { PlusIcon, ArrowLeftIcon, ReceiptIcon, GaugeIcon, ListIcon, PencilIcon } from 'lucide-react'
+import { formatLicensePlate } from '@/lib/utils'
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -51,12 +52,19 @@ export default async function CarPage({ params }: Props) {
           <h1 className="text-2xl font-bold">{car.make} {car.model}</h1>
           <p className="text-muted-foreground">{car.year}</p>
         </div>
-        <DeleteCarButton carId={car.id} />
+        <div className="flex gap-1">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/cars/${id}/edit`}>
+              <PencilIcon className="w-4 h-4" />
+            </Link>
+          </Button>
+          <DeleteCarButton carId={car.id} />
+        </div>
       </div>
 
       <div className="flex gap-2 flex-wrap mb-4">
-        {car.licensePlate && <Badge variant="outline">{car.licensePlate}</Badge>}
-        {car.vin && <Badge variant="secondary" className="font-mono text-xs">{car.vin}</Badge>}
+        {car.licensePlate && <Badge variant="outline">{formatLicensePlate(car.licensePlate)}</Badge>}
+        {car.vin && <Badge variant="secondary" className="font-mono text-xs uppercase">{car.vin}</Badge>}
       </div>
 
       {records.length > 0 && (

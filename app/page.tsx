@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getSession } from '@/lib/auth/session'
 import { Button } from '@/components/ui/button'
@@ -29,7 +28,6 @@ const features = [
 
 export default async function LandingPage() {
   const session = await getSession()
-  if (session) redirect('/dashboard')
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -41,12 +39,20 @@ export default async function LandingPage() {
             Service Book
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Sign in</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/register">Get started</Link>
-            </Button>
+            {session ? (
+              <Button size="sm" asChild>
+                <Link href="/dashboard">My Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">Sign in</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/register">Get started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -63,12 +69,20 @@ export default async function LandingPage() {
           Service Book is a simple tool to log and track maintenance records for all your vehicles — oil changes, inspections, repairs, and more.
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
-          <Button size="lg" asChild>
-            <Link href="/register">Create free account</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/login">Sign in</Link>
-          </Button>
+          {session ? (
+            <Button size="lg" asChild>
+              <Link href="/dashboard">Go to Dashboard</Link>
+            </Button>
+          ) : (
+            <>
+              <Button size="lg" asChild>
+                <Link href="/register">Create free account</Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/login">Sign in</Link>
+              </Button>
+            </>
+          )}
         </div>
       </section>
 

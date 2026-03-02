@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import RecordCard from '@/components/cards/record-card'
 import DeleteRecordButton from '@/components/delete-record-button'
-import { ClipboardListIcon, PlusIcon } from 'lucide-react'
+import { ClipboardListIcon, PlusIcon, PencilIcon } from 'lucide-react'
 import type { ServiceRecord } from '@/lib/db/schema'
 
 type Props = {
@@ -69,10 +69,15 @@ export default function RecordsList({ records, carId }: Props) {
       ) : (
         <div className="flex flex-col gap-3">
           {filtered.map((record) => (
-            <div key={record.id} className="flex items-start gap-2">
+            <div key={record.id} className="flex items-start gap-1">
               <div className="flex-1 min-w-0">
                 <RecordCard record={record} />
               </div>
+              <Button variant="ghost" size="icon" asChild className="shrink-0 text-muted-foreground hover:text-foreground mt-0.5">
+                <Link href={`/cars/${carId}/records/${record.id}/edit`}>
+                  <PencilIcon className="w-4 h-4" />
+                </Link>
+              </Button>
               <DeleteRecordButton recordId={record.id} />
             </div>
           ))}

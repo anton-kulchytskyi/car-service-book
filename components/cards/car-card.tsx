@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { ChevronRightIcon, ClipboardListIcon, CalendarIcon } from 'lucide-react'
 import type { Car } from '@/lib/db/schema'
+import { formatLicensePlate } from '@/lib/utils'
 
 type Stats = {
   recordCount: number
@@ -29,9 +30,9 @@ export default function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
         </CardHeader>
         <CardContent className="pt-0 flex flex-col gap-2">
           <div className="flex gap-2 flex-wrap">
-            {car.licensePlate && <Badge variant="outline">{car.licensePlate}</Badge>}
+            {car.licensePlate && <Badge variant="outline">{formatLicensePlate(car.licensePlate)}</Badge>}
             {car.vin && (
-              <Badge variant="secondary" className="font-mono text-xs">
+              <Badge variant="secondary" className="font-mono text-xs uppercase">
                 {car.vin}
               </Badge>
             )}
