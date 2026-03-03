@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CalendarIcon, GaugeIcon } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { CalendarIcon, GaugeIcon, TriangleAlertIcon } from 'lucide-react'
 import type { ServiceRecord } from '@/lib/db/schema'
 
 function formatDate(date: Date) {
@@ -11,7 +12,7 @@ function formatDate(date: Date) {
   }).format(new Date(date))
 }
 
-export default function RecordCard({ record }: { record: ServiceRecord }) {
+export default function RecordCard({ record, mileageWarning }: { record: ServiceRecord; mileageWarning?: boolean }) {
   return (
     <Card>
       <CardContent className="pt-4 pb-4">
@@ -29,17 +30,23 @@ export default function RecordCard({ record }: { record: ServiceRecord }) {
               <span className="flex items-center gap-1">
                 <GaugeIcon className="w-3 h-3" />
                 {record.mileage.toLocaleString('uk-UA')} km
+                {mileageWarning && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TriangleAlertIcon className="w-4 h-4 text-amber-500 fill-amber-100 cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Mileage is lower than the previous record by date
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </span>
             </div>
           </div>
           {record.cost && (
             <div className="text-right shrink-0">
               <p className="font-semibold text-sm">
-                {Number(record.cost).toLocaleString('uk-UA', {
-                  style: 'currency',
-                  currency: 'UAH',
-                  maximumFractionDigits: 0,
-                })}
+                {Number(record.cost).toLocaleString('uk-UA', { maximumFractionDigits: 0 })} грн
               </p>
             </div>
           )}

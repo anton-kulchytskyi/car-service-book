@@ -19,6 +19,15 @@ export default function RecordsList({ records, carId }: Props) {
   const types = Array.from(new Set(records.map((r) => r.type)))
   const filtered = activeFilter ? records.filter((r) => r.type === activeFilter) : records
 
+  // Compute mileage warnings: sort by date ascending, flag records where mileage < previous
+  const mileageWarnings = new Set<string>()
+  const byDate = [...records].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  for (let i = 1; i < byDate.length; i++) {
+    if (byDate[i].mileage < byDate[i - 1].mileage) {
+      mileageWarnings.add(byDate[i].id)
+    }
+  }
+
   if (records.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-14 text-center text-muted-foreground">
@@ -71,7 +80,7 @@ export default function RecordsList({ records, carId }: Props) {
           {filtered.map((record) => (
             <div key={record.id} className="flex items-start gap-1">
               <div className="flex-1 min-w-0">
-                <RecordCard record={record} />
+                <RecordCard record={record} mileageWarning={mileageWarnings.has(record.id)} />
               </div>
               <Button variant="ghost" size="icon" asChild className="shrink-0 text-muted-foreground hover:text-foreground mt-0.5">
                 <Link href={`/cars/${carId}/records/${record.id}/edit`}>
