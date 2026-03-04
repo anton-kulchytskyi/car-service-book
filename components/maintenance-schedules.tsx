@@ -28,7 +28,8 @@ function nextServiceText(schedule: MaintenanceSchedule, currentKm: number | null
   if (schedule.intervalKm && schedule.lastDoneKm != null) {
     const next = schedule.lastDoneKm + schedule.intervalKm
     const diff = next - (currentKm ?? 0)
-    parts.push(diff > 0 ? `in ${diff.toLocaleString()} km` : `${Math.abs(diff).toLocaleString()} km overdue`)
+    const fmtKm = (n: number) => String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+    parts.push(diff > 0 ? `in ${fmtKm(diff)} km` : `${fmtKm(diff)} km overdue`)
   }
   if (schedule.intervalMonths && schedule.lastDoneDate) {
     const next = new Date(schedule.lastDoneDate)
