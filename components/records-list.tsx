@@ -3,9 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import RecordCard from '@/components/cards/record-card'
 import DeleteRecordButton from '@/components/delete-record-button'
-import { ClipboardListIcon, PlusIcon, PencilIcon } from 'lucide-react'
+import { ClipboardListIcon, PencilIcon, SearchIcon, XIcon, CalendarIcon } from 'lucide-react'
 import type { ServiceRecord } from '@/lib/db/schema'
 
 type Props = {
@@ -15,9 +16,26 @@ type Props = {
 
 export default function RecordsList({ records, carId }: Props) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+
+  const query = search.trim().toLowerCase()
 
   const types = Array.from(new Set(records.map((r) => r.type)))
-  const filtered = activeFilter ? records.filter((r) => r.type === activeFilter) : records
+
+  const filtered = records.filter((r) => {
+    if (activeFilter && r.type !== activeFilter) return false
+    if (dateFrom && new Date(r.date) < new Date(dateFrom)) return false
+    if (dateTo && new Date(r.date) > new Date(dateTo + 'T23:59:59')) return false
+    if (!query) return true
+    return (
+      r.type.toLowerCase().includes(query) ||
+      r.description.toLowerCase().includes(query)
+    )
+  })
+
+  const hasFilters = !!activeFilter || !!dateFrom || !!dateTo || !!search
 
   // Compute mileage warnings: sort by date ascending, flag records where mileage < previous
   const mileageWarnings = new Set<string>()
@@ -43,6 +61,43 @@ export default function RecordsList({ records, carId }: Props) {
 
   return (
     <div>
+      {/* Date range */}
+      <div className="flex items-center gap-2 mb-3">
+        <CalendarIcon className="w-4 h-4 text-muted-foreground shrink-0" />
+        <Input
+          type="date"
+          value={dateFrom}
+          onChange={(e) => setDateFrom(e.target.value)}
+          className="w-auto flex-1 text-sm"
+        />
+        <span className="text-muted-foreground text-sm shrink-0">—</span>
+        <Input
+          type="date"
+          value={dateTo}
+          onChange={(e) => setDateTo(e.target.value)}
+          className="w-auto flex-1 text-sm"
+        />
+      </div>
+
+      {/* Search input */}
+      <div className="relative mb-3">
+        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by type or description..."
+          className="pl-9 pr-9"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          >
+            <XIcon className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
       {types.length > 1 && (
         <div className="flex gap-2 flex-wrap mb-4">
           <button
@@ -71,9 +126,21 @@ export default function RecordsList({ records, carId }: Props) {
         </div>
       )}
 
+      {hasFilters && (
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs text-muted-foreground">{filtered.length} of {records.length} records</p>
+          <button
+            onClick={() => { setSearch(''); setDateFrom(''); setDateTo(''); setActiveFilter(null) }}
+            className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+
       {filtered.length === 0 ? (
         <p className="text-center py-10 text-sm text-muted-foreground">
-          No records for &quot;{activeFilter}&quot;
+          No records found{query ? ` for "${search}"` : activeFilter ? ` for "${activeFilter}"` : ''}
         </p>
       ) : (
         <div className="flex flex-col gap-3">
