@@ -8,6 +8,13 @@
       "when": 1772456107548,
       "tag": "0000_nosy_nicolaos",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772661574792,
+      "tag": "0001_serious_phalanx",
+      "breakpoints": true
     }
   ]
 }

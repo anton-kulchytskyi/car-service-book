@@ -2,13 +2,14 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { and, eq, desc } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars, serviceRecords } from '@/lib/db/schema'
+import { cars, serviceRecords, maintenanceSchedules } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import RecordsList from '@/components/records-list'
 import DeleteCarButton from '@/components/delete-car-button'
+import MaintenanceSchedules from '@/components/maintenance-schedules'
 import { PlusIcon, ArrowLeftIcon, ReceiptIcon, GaugeIcon, ListIcon, PencilIcon } from 'lucide-react'
 import { formatLicensePlate } from '@/lib/utils'
 
@@ -28,11 +29,10 @@ export default async function CarPage({ params }: Props) {
 
   if (!car) notFound()
 
-  const records = await db
-    .select()
-    .from(serviceRecords)
-    .where(eq(serviceRecords.carId, id))
-    .orderBy(desc(serviceRecords.date))
+  const [records, schedules] = await Promise.all([
+    db.select().from(serviceRecords).where(eq(serviceRecords.carId, id)).orderBy(desc(serviceRecords.date)),
+    db.select().from(maintenanceSchedules).where(eq(maintenanceSchedules.carId, id)).orderBy(maintenanceSchedules.createdAt),
+  ])
 
   const totalCost = records.reduce((sum, r) => sum + (r.cost ? Number(r.cost) : 0), 0)
   const maxMileage = records.length > 0 ? Math.max(...records.map((r) => r.mileage)) : null
@@ -106,6 +106,10 @@ export default async function CarPage({ params }: Props) {
       </div>
 
       <RecordsList records={records} carId={id} />
+
+      <Separator className="my-6" />
+
+      <MaintenanceSchedules carId={id} schedules={schedules} currentKm={maxMileage} />
     </div>
   )
 }

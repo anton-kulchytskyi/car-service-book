@@ -2,11 +2,12 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { eq, count, max, inArray } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars, serviceRecords } from '@/lib/db/schema'
+import { cars, serviceRecords, maintenanceSchedules } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { Button } from '@/components/ui/button'
 import CarCard from '@/components/cards/car-card'
 import { PlusIcon, CarIcon } from 'lucide-react'
+import { getMaintenanceStatus } from '@/lib/utils'
 
 export default async function DashboardPage() {
   const session = await getSession()
@@ -18,20 +19,32 @@ export default async function DashboardPage() {
     .where(eq(cars.userId, session.sub))
     .orderBy(cars.createdAt)
 
-  const stats =
-    userCars.length > 0
-      ? await db
-          .select({
-            carId: serviceRecords.carId,
-            recordCount: count(),
-            lastDate: max(serviceRecords.date),
-          })
-          .from(serviceRecords)
-          .where(inArray(serviceRecords.carId, userCars.map((c) => c.id)))
-          .groupBy(serviceRecords.carId)
-      : []
+  const carIds = userCars.map((c) => c.id)
 
-  const statsMap = new Map(stats.map((s) => [s.carId, s]))
+  const [recordStats, scheduleRows, mileageRows] =
+    carIds.length > 0
+      ? await Promise.all([
+          db.select({ carId: serviceRecords.carId, recordCount: count(), lastDate: max(serviceRecords.date) })
+            .from(serviceRecords).where(inArray(serviceRecords.carId, carIds)).groupBy(serviceRecords.carId),
+          db.select().from(maintenanceSchedules).where(inArray(maintenanceSchedules.carId, carIds)),
+          db.select({ carId: serviceRecords.carId, maxMileage: max(serviceRecords.mileage) })
+            .from(serviceRecords).where(inArray(serviceRecords.carId, carIds)).groupBy(serviceRecords.carId),
+        ])
+      : [[], [], []]
+
+  const mileageMap = new Map(mileageRows.map((r) => [r.carId, r.maxMileage]))
+
+  const statsMap = new Map(recordStats.map((s) => {
+    const currentKm = mileageMap.get(s.carId) ?? null
+    const carSchedules = scheduleRows.filter((sc) => sc.carId === s.carId)
+    const statuses = carSchedules.map((sc) => getMaintenanceStatus(sc, currentKm))
+    return [s.carId, {
+      ...s,
+      maxMileage: currentKm,
+      overdueCount: statuses.filter((st) => st === 'overdue').length,
+      soonCount: statuses.filter((st) => st === 'soon').length,
+    }]
+  }))
 
   return (
     <div>
