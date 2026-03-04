@@ -10,7 +10,8 @@ import { Separator } from '@/components/ui/separator'
 import RecordsList from '@/components/records-list'
 import DeleteCarButton from '@/components/delete-car-button'
 import MaintenanceSchedules from '@/components/maintenance-schedules'
-import { PlusIcon, ArrowLeftIcon, ReceiptIcon, GaugeIcon, ListIcon, PencilIcon } from 'lucide-react'
+import CurrentMileage from '@/components/current-mileage'
+import { PlusIcon, ArrowLeftIcon, ReceiptIcon, ListIcon, PencilIcon } from 'lucide-react'
 import { formatLicensePlate } from '@/lib/utils'
 
 type Props = { params: Promise<{ id: string }> }
@@ -36,6 +37,7 @@ export default async function CarPage({ params }: Props) {
 
   const totalCost = records.reduce((sum, r) => sum + (r.cost ? Number(r.cost) : 0), 0)
   const maxMileage = records.length > 0 ? Math.max(...records.map((r) => r.mileage)) : null
+  const currentKm = car.currentMileage ?? maxMileage
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -68,31 +70,23 @@ export default async function CarPage({ params }: Props) {
         {car.vin && <Badge variant="secondary" className="font-mono text-xs uppercase">{car.vin}</Badge>}
       </div>
 
-      {records.length > 0 && (
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="flex flex-col items-center justify-center rounded-lg border bg-muted/40 py-3 px-2 text-center">
-            <ListIcon className="w-4 h-4 text-muted-foreground mb-1" />
-            <p className="text-lg font-bold">{records.length}</p>
-            <p className="text-xs text-muted-foreground">records</p>
-          </div>
-          <div className="flex flex-col items-center justify-center rounded-lg border bg-muted/40 py-3 px-2 text-center">
-            <ReceiptIcon className="w-4 h-4 text-muted-foreground mb-1" />
-            <p className="text-lg font-bold">
-              {totalCost > 0
-                ? totalCost.toLocaleString('uk-UA', { maximumFractionDigits: 0 })
-                : '—'}
-            </p>
-            <p className="text-xs text-muted-foreground">UAH spent</p>
-          </div>
-          <div className="flex flex-col items-center justify-center rounded-lg border bg-muted/40 py-3 px-2 text-center">
-            <GaugeIcon className="w-4 h-4 text-muted-foreground mb-1" />
-            <p className="text-lg font-bold">
-              {maxMileage !== null ? maxMileage.toLocaleString('uk-UA') : '—'}
-            </p>
-            <p className="text-xs text-muted-foreground">km</p>
-          </div>
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="flex flex-col items-center justify-center rounded-lg border bg-muted/40 py-3 px-2 text-center">
+          <ListIcon className="w-4 h-4 text-muted-foreground mb-1" />
+          <p className="text-lg font-bold">{records.length}</p>
+          <p className="text-xs text-muted-foreground">records</p>
         </div>
-      )}
+        <div className="flex flex-col items-center justify-center rounded-lg border bg-muted/40 py-3 px-2 text-center">
+          <ReceiptIcon className="w-4 h-4 text-muted-foreground mb-1" />
+          <p className="text-lg font-bold">
+            {totalCost > 0
+              ? totalCost.toLocaleString('uk-UA', { maximumFractionDigits: 0 })
+              : '—'}
+          </p>
+          <p className="text-xs text-muted-foreground">UAH spent</p>
+        </div>
+        <CurrentMileage carId={id} currentMileage={car.currentMileage ?? null} />
+      </div>
 
       <Separator className="mb-6" />
 
@@ -100,7 +94,7 @@ export default async function CarPage({ params }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10">
         {/* Maintenance — order-1 on mobile (top), order-2 on desktop (right) */}
         <div className="order-1 lg:order-2 pb-6 border-b lg:border-b-0 lg:border-l lg:pl-10">
-          <MaintenanceSchedules carId={id} schedules={schedules} currentKm={maxMileage} />
+          <MaintenanceSchedules carId={id} schedules={schedules} currentKm={currentKm} />
         </div>
 
         {/* Service History — order-2 on mobile (bottom), order-1 on desktop (left) */}

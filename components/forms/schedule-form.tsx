@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { MAINTENANCE_DEFAULTS } from '@/lib/constants'
 import type { MaintenanceSchedule } from '@/lib/db/schema'
@@ -18,8 +19,6 @@ type FormValues = {
   serviceName: string
   intervalKm: string
   intervalMonths: string
-  lastDoneKm: string
-  lastDoneDate: string
   notes: string
 }
 
@@ -32,13 +31,11 @@ type Props = {
 }
 
 function toFormValues(s?: MaintenanceSchedule): FormValues {
-  if (!s) return { serviceName: '', intervalKm: '', intervalMonths: '', lastDoneKm: '', lastDoneDate: '', notes: '' }
+  if (!s) return { serviceName: '', intervalKm: '', intervalMonths: '', notes: '' }
   return {
     serviceName: s.serviceName,
     intervalKm: s.intervalKm?.toString() ?? '',
     intervalMonths: s.intervalMonths?.toString() ?? '',
-    lastDoneKm: s.lastDoneKm?.toString() ?? '',
-    lastDoneDate: s.lastDoneDate ? new Date(s.lastDoneDate).toISOString().split('T')[0] : '',
     notes: s.notes ?? '',
   }
 }
@@ -76,8 +73,6 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
         serviceName: values.serviceName,
         intervalKm: values.intervalKm ? Number(values.intervalKm) : null,
         intervalMonths: values.intervalMonths ? Number(values.intervalMonths) : null,
-        lastDoneKm: values.lastDoneKm ? Number(values.lastDoneKm) : null,
-        lastDoneDate: values.lastDoneDate || null,
         notes: values.notes || null,
       }
 
@@ -89,6 +84,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
         setError('Failed to save. Please try again.')
         return
       }
+
       onOpenChange(false)
       onSaved()
     } finally {
@@ -96,7 +92,6 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
     }
   }
 
-  // Reset form when dialog opens
   function handleOpenChange(o: boolean) {
     if (o) setValues(toFormValues(initial))
     setError('')
@@ -108,6 +103,9 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>{initial ? 'Edit Maintenance Schedule' : 'Add Maintenance Schedule'}</DialogTitle>
+          <DialogDescription>
+            Last done date and mileage are synced automatically from your service history.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -115,14 +113,17 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
             <Label>Service</Label>
             <Input
               value={values.serviceName}
-              onChange={(e) => set('serviceName', e.target.value)}
+              onChange={(e) => {
+                set('serviceName', e.target.value)
+                applyDefault(e.target.value)
+              }}
               placeholder="e.g. Oil Change"
               required
               list="maintenance-defaults"
             />
             <datalist id="maintenance-defaults">
               {MAINTENANCE_DEFAULTS.map((d) => (
-                <option key={d.name} value={d.name} onClick={() => applyDefault(d.name)} />
+                <option key={d.name} value={d.name} />
               ))}
             </datalist>
             <p className="text-xs text-muted-foreground">
@@ -149,27 +150,6 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
                 value={values.intervalMonths}
                 onChange={(e) => set('intervalMonths', e.target.value)}
                 placeholder="e.g. 6"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>Last done at (km)</Label>
-              <Input
-                type="number"
-                min="0"
-                value={values.lastDoneKm}
-                onChange={(e) => set('lastDoneKm', e.target.value)}
-                placeholder="e.g. 85000"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Last done on</Label>
-              <Input
-                type="date"
-                value={values.lastDoneDate}
-                onChange={(e) => set('lastDoneDate', e.target.value)}
               />
             </div>
           </div>

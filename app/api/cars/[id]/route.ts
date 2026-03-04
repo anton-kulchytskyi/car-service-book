@@ -50,6 +50,28 @@ export async function PUT(req: NextRequest, { params }: Params) {
   return NextResponse.json({ car: updated })
 }
 
+export async function PATCH(req: NextRequest, { params }: Params) {
+  const session = await getSession()
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { id } = await params
+  const car = await getOwnedCar(id, session.sub)
+  if (!car) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  const { currentMileage } = await req.json()
+  if (typeof currentMileage !== 'number' || currentMileage < 0) {
+    return NextResponse.json({ error: 'Invalid mileage' }, { status: 400 })
+  }
+
+  const [updated] = await db
+    .update(cars)
+    .set({ currentMileage })
+    .where(eq(cars.id, id))
+    .returning()
+
+  return NextResponse.json({ car: updated })
+}
+
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const session = await getSession()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

@@ -1,0 +1,1 @@
+ALTER TABLE "cars" ADD COLUMN "current_mileage" integer;

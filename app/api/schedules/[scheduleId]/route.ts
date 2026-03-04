@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { cars, maintenanceSchedules } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { updateScheduleSchema } from '@/lib/validators'
+import { syncMaintenanceSchedules } from '@/lib/maintenance-sync'
 
 type Props = { params: Promise<{ scheduleId: string }> }
 
@@ -29,18 +30,19 @@ export async function PATCH(req: NextRequest, { params }: Props) {
   const parsed = updateScheduleSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
-  const { lastDoneDate, ...rest } = parsed.data
+  await db
+    .update(maintenanceSchedules)
+    .set(parsed.data)
+    .where(eq(maintenanceSchedules.id, scheduleId))
+
+  // Re-sync in case service name changed
+  await syncMaintenanceSchedules(row.carId)
 
   const [updated] = await db
-    .update(maintenanceSchedules)
-    .set({
-      ...rest,
-      ...(lastDoneDate !== undefined
-        ? { lastDoneDate: lastDoneDate ? new Date(lastDoneDate) : null }
-        : {}),
-    })
+    .select()
+    .from(maintenanceSchedules)
     .where(eq(maintenanceSchedules.id, scheduleId))
-    .returning()
+    .limit(1)
 
   return NextResponse.json(updated)
 }

@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { cars, maintenanceSchedules } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { createScheduleSchema } from '@/lib/validators'
+import { syncMaintenanceSchedules } from '@/lib/maintenance-sync'
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -48,16 +49,22 @@ export async function POST(req: NextRequest, { params }: Props) {
   const parsed = createScheduleSchema.safeParse({ ...body, carId: id })
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
-  const { carId, lastDoneDate, ...rest } = parsed.data
+  const { carId, ...rest } = parsed.data
 
   const [schedule] = await db
     .insert(maintenanceSchedules)
-    .values({
-      ...rest,
-      carId,
-      lastDoneDate: lastDoneDate ? new Date(lastDoneDate) : null,
-    })
+    .values({ ...rest, carId, lastDoneKm: null, lastDoneDate: null })
     .returning()
 
-  return NextResponse.json(schedule, { status: 201 })
+  // Sync all schedules for this car from service history
+  await syncMaintenanceSchedules(carId)
+
+  // Return the freshly synced schedule
+  const [synced] = await db
+    .select()
+    .from(maintenanceSchedules)
+    .where(eq(maintenanceSchedules.id, schedule.id))
+    .limit(1)
+
+  return NextResponse.json(synced, { status: 201 })
 }

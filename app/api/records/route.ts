@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { cars, serviceRecords } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { createRecordSchema } from '@/lib/validators'
+import { syncMaintenanceSchedules } from '@/lib/maintenance-sync'
 
 export async function GET(req: NextRequest) {
   const session = await getSession()
@@ -55,6 +56,14 @@ export async function POST(req: NextRequest) {
     .insert(serviceRecords)
     .values({ ...rest, carId, date: new Date(date) })
     .returning()
+
+  // Auto-update car's currentMileage if new record has higher mileage
+  const [currentCar] = await db.select({ currentMileage: cars.currentMileage }).from(cars).where(eq(cars.id, carId)).limit(1)
+  if (currentCar && (currentCar.currentMileage == null || rest.mileage > currentCar.currentMileage)) {
+    await db.update(cars).set({ currentMileage: rest.mileage }).where(eq(cars.id, carId))
+  }
+
+  await syncMaintenanceSchedules(carId)
 
   return NextResponse.json({ record }, { status: 201 })
 }

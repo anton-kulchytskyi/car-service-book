@@ -29,8 +29,6 @@ const scheduleBaseSchema = z.object({
   serviceName: z.string().min(1, 'Service name is required'),
   intervalKm: z.coerce.number().int().min(1).optional().nullable(),
   intervalMonths: z.coerce.number().int().min(1).optional().nullable(),
-  lastDoneKm: z.coerce.number().int().min(0).optional().nullable(),
-  lastDoneDate: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
 })
 

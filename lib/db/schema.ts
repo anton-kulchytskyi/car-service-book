@@ -17,6 +17,7 @@ export const cars = pgTable('cars', {
   year: integer('year').notNull(),
   vin: text('vin'),
   licensePlate: text('license_plate'),
+  currentMileage: integer('current_mileage'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 

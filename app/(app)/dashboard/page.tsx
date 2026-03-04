@@ -35,7 +35,8 @@ export default async function DashboardPage() {
   const mileageMap = new Map(mileageRows.map((r) => [r.carId, r.maxMileage]))
 
   const statsMap = new Map(recordStats.map((s) => {
-    const currentKm = mileageMap.get(s.carId) ?? null
+    const car = userCars.find((c) => c.id === s.carId)
+    const currentKm = car?.currentMileage ?? mileageMap.get(s.carId) ?? null
     const carSchedules = scheduleRows.filter((sc) => sc.carId === s.carId)
     const statuses = carSchedules.map((sc) => getMaintenanceStatus(sc, currentKm))
     return [s.carId, {

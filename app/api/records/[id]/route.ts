@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { cars, serviceRecords } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { updateRecordSchema } from '@/lib/validators'
+import { syncMaintenanceSchedules } from '@/lib/maintenance-sync'
 
 type Params = { params: Promise<{ id: string }> }
 
@@ -49,6 +50,8 @@ export async function PUT(req: NextRequest, { params }: Params) {
     .where(eq(serviceRecords.id, id))
     .returning()
 
+  await syncMaintenanceSchedules(record.carId)
+
   return NextResponse.json({ record: updated })
 }
 
@@ -61,6 +64,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   if (!record) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await db.delete(serviceRecords).where(eq(serviceRecords.id, id))
+  await syncMaintenanceSchedules(record.carId)
 
   return NextResponse.json({ success: true })
 }
