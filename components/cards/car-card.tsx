@@ -1,13 +1,16 @@
 import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ChevronRightIcon, ClipboardListIcon, CalendarIcon } from 'lucide-react'
+import { ChevronRightIcon, ClipboardListIcon, CalendarIcon, AlertTriangleIcon } from 'lucide-react'
 import type { Car } from '@/lib/db/schema'
 import { formatLicensePlate } from '@/lib/utils'
 
 type Stats = {
   recordCount: number
   lastDate: Date | null
+  maxMileage: number | null
+  overdueCount: number
+  soonCount: number
 } | undefined
 
 function formatLastDate(date: Date | null) {
@@ -16,6 +19,9 @@ function formatLastDate(date: Date | null) {
 }
 
 export default function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
+  const overdueCount = stats?.overdueCount ?? 0
+  const soonCount = stats?.soonCount ?? 0
+
   return (
     <Link href={`/cars/${car.id}`} className="group block">
       <Card className="h-full transition-shadow group-hover:shadow-md">
@@ -49,6 +55,21 @@ export default function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
               </span>
             )}
           </div>
+          {(overdueCount > 0 || soonCount > 0) && (
+            <div className="flex gap-2 flex-wrap">
+              {overdueCount > 0 && (
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-destructive bg-destructive/10 border border-destructive/20 rounded px-2 py-0.5">
+                  <AlertTriangleIcon className="w-3 h-3" />
+                  {overdueCount} overdue
+                </span>
+              )}
+              {soonCount > 0 && (
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-0.5 dark:text-amber-400 dark:bg-amber-950/30 dark:border-amber-800">
+                  {soonCount} due soon
+                </span>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </Link>

@@ -25,6 +25,29 @@ export const createRecordSchema = z.object({
 
 export const updateRecordSchema = createRecordSchema.omit({ carId: true }).partial()
 
+const scheduleBaseSchema = z.object({
+  serviceName: z.string().min(1, 'Service name is required'),
+  intervalKm: z.coerce.number().int().min(1).optional().nullable(),
+  intervalMonths: z.coerce.number().int().min(1).optional().nullable(),
+  lastDoneKm: z.coerce.number().int().min(0).optional().nullable(),
+  lastDoneDate: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+})
+
+const intervalRefine = (d: { intervalKm?: number | null; intervalMonths?: number | null }) =>
+  !!(d.intervalKm || d.intervalMonths)
+
+export const createScheduleSchema = z.object({ carId: z.string().uuid() })
+  .merge(scheduleBaseSchema)
+  .refine(intervalRefine, { message: 'At least one interval (km or months) is required' })
+
+export const updateScheduleSchema = scheduleBaseSchema
+  .partial()
+  .refine(intervalRefine, { message: 'At least one interval (km or months) is required' })
+
+export type CreateScheduleInput = z.infer<typeof createScheduleSchema>
+export type UpdateScheduleInput = z.infer<typeof updateScheduleSchema>
+
 export type CreateCarInput = z.infer<typeof createCarSchema>
 export type UpdateCarInput = z.infer<typeof updateCarSchema>
 export type CreateRecordInput = z.infer<typeof createRecordSchema>
