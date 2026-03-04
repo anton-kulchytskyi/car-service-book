@@ -38,7 +38,7 @@ export default async function CarPage({ params }: Props) {
   const maxMileage = records.length > 0 ? Math.max(...records.map((r) => r.mileage)) : null
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <Link
         href="/dashboard"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -47,6 +47,7 @@ export default async function CarPage({ params }: Props) {
         My Cars
       </Link>
 
+      {/* Car header */}
       <div className="flex items-start justify-between mb-2">
         <div>
           <h1 className="text-2xl font-bold">{car.make} {car.model}</h1>
@@ -95,21 +96,27 @@ export default async function CarPage({ params }: Props) {
 
       <Separator className="mb-6" />
 
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Service History</h2>
-        <Button asChild size="sm">
-          <Link href={`/cars/${id}/records/new`}>
-            <PlusIcon className="w-4 h-4 mr-1" />
-            Add Record
-          </Link>
-        </Button>
+      {/* Two-column on desktop, maintenance above history on mobile */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10">
+        {/* Maintenance — order-1 on mobile (top), order-2 on desktop (right) */}
+        <div className="order-1 lg:order-2 pb-6 border-b lg:border-b-0 lg:border-l lg:pl-10">
+          <MaintenanceSchedules carId={id} schedules={schedules} currentKm={maxMileage} />
+        </div>
+
+        {/* Service History — order-2 on mobile (bottom), order-1 on desktop (left) */}
+        <div className="order-2 lg:order-1">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">Service History</h2>
+            <Button asChild size="sm">
+              <Link href={`/cars/${id}/records/new`}>
+                <PlusIcon className="w-4 h-4 mr-1" />
+                Add Record
+              </Link>
+            </Button>
+          </div>
+          <RecordsList records={records} carId={id} />
+        </div>
       </div>
-
-      <RecordsList records={records} carId={id} />
-
-      <Separator className="my-6" />
-
-      <MaintenanceSchedules carId={id} schedules={schedules} currentKm={maxMileage} />
     </div>
   )
 }
