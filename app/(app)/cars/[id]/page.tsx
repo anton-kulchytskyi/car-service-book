@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import RecordsList from '@/components/records-list'
 import DeleteCarButton from '@/components/delete-car-button'
 import TransferCarButton from '@/components/transfer-car-button'
+import ExportPdfButton from '@/components/export-pdf-button-wrapper'
 import MaintenanceSchedules from '@/components/maintenance-schedules'
 import CurrentMileage from '@/components/current-mileage'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -135,12 +136,21 @@ export default async function CarPage({ params }: Props) {
         <div className="order-2 lg:order-1">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Service History</h2>
-            <Button asChild size="sm">
-              <Link href={`/cars/${id}/records/new`}>
-                <PlusIcon className="w-4 h-4 mr-1" />
-                Add Record
-              </Link>
-            </Button>
+            <div className="flex gap-2">
+              <ExportPdfButton
+                car={car}
+                records={records}
+                ownershipHistory={ownershipHistory}
+                totalCost={totalCost}
+                currentKm={currentKm}
+              />
+              <Button asChild size="sm">
+                <Link href={`/cars/${id}/records/new`}>
+                  <PlusIcon className="w-4 h-4 mr-1" />
+                  Add Record
+                </Link>
+              </Button>
+            </div>
           </div>
           <RecordsList records={records} carId={id} />
         </div>
