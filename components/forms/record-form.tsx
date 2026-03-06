@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import PhotoUpload, { type PhotoItem } from '@/components/photo-upload'
 import { uploadFiles } from '@/lib/upload-files'
 import { SERVICE_TYPES } from '@/lib/constants'
@@ -31,6 +32,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
   const [isPending, startTransition] = useTransition()
   const [photos, setPhotos] = useState<PhotoItem[]>(defaultValues?.photos ?? [])
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
+  const [type, setType] = useState(defaultValues?.type ?? SERVICE_TYPES[0])
   const router = useRouter()
   const isEdit = !!recordId
 
@@ -48,7 +50,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
       ...(isEdit ? {} : { carId }),
       date: new Date(form.get('date') as string).toISOString(),
       mileage: Number(form.get('mileage')),
-      type: form.get('type'),
+      type,
       description: form.get('description'),
       cost: (form.get('cost') as string) || undefined,
       photos,
@@ -91,18 +93,17 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="type">Service Type *</Label>
-        <select
-          id="type"
-          name="type"
-          required
-          defaultValue={defaultValues?.type ?? SERVICE_TYPES[0]}
-          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {SERVICE_TYPES.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+        <Label>Service Type *</Label>
+        <Select value={type} onValueChange={setType}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SERVICE_TYPES.map((t) => (
+              <SelectItem key={t} value={t}>{t}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         {fieldErrors.type && <p className="text-sm text-destructive">{fieldErrors.type[0]}</p>}
       </div>
 
