@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import PhotoUpload, { type PhotoItem } from '@/components/photo-upload'
+import { uploadFiles } from '@/lib/upload-files'
 import { SERVICE_TYPES } from '@/lib/constants'
 
 type FieldErrors = Partial<Record<string, string[]>>
@@ -29,6 +30,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [isPending, startTransition] = useTransition()
   const [photos, setPhotos] = useState<PhotoItem[]>(defaultValues?.photos ?? [])
+  const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const router = useRouter()
   const isEdit = !!recordId
 
@@ -53,6 +55,18 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
     }
 
     startTransition(async () => {
+      let allPhotos = photos
+      if (pendingFiles.length > 0) {
+        try {
+          const newItems = await uploadFiles(pendingFiles)
+          allPhotos = [...photos, ...newItems]
+        } catch {
+          setFieldErrors({ _: ['Photo upload failed. Please try again.'] })
+          return
+        }
+      }
+      body.photos = allPhotos
+
       const res = await fetch(isEdit ? `/api/records/${recordId}` : '/api/records', {
         method: isEdit ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -111,7 +125,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
 
       <div className="grid gap-1.5">
         <Label>Photos</Label>
-        <PhotoUpload value={photos} onChange={setPhotos} max={5} label="Add photos (receipts, parts, etc.)" />
+        <PhotoUpload value={photos} onChange={setPhotos} onPendingFiles={setPendingFiles} max={5} label="Add photos (receipts, parts, etc.)" />
       </div>
 
       <Button type="submit" disabled={isPending} className="mt-2">

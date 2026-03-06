@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Combobox from '@/components/ui/combobox'
 import PhotoUpload, { type PhotoItem } from '@/components/photo-upload'
+import { uploadFiles } from '@/lib/upload-files'
 import { formatLicensePlate } from '@/lib/utils'
 import { CAR_MAKES, getModels } from '@/lib/car-data'
 
@@ -40,6 +41,7 @@ export default function CarForm({ carId, defaultValues }: Props) {
       ? [{ url: defaultValues.photoUrl, publicId: defaultValues.photoPublicId }]
       : []
   )
+  const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const router = useRouter()
   const isEdit = !!carId
 
@@ -69,6 +71,19 @@ export default function CarForm({ carId, defaultValues }: Props) {
     }
 
     startTransition(async () => {
+      let uploaded = photo
+      if (pendingFiles.length > 0) {
+        try {
+          const newItems = await uploadFiles(pendingFiles)
+          uploaded = [...photo, ...newItems]
+        } catch {
+          setFieldErrors({ _: ['Photo upload failed. Please try again.'] })
+          return
+        }
+      }
+      body.photoUrl = uploaded[0]?.url ?? null
+      body.photoPublicId = uploaded[0]?.publicId ?? null
+
       const res = await fetch(isEdit ? `/api/cars/${carId}` : '/api/cars', {
         method: isEdit ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -145,7 +160,7 @@ export default function CarForm({ carId, defaultValues }: Props) {
 
       <div className="grid gap-1.5">
         <Label>Car Photo</Label>
-        <PhotoUpload value={photo} onChange={setPhoto} max={1} label="Add photo" />
+        <PhotoUpload value={photo} onChange={setPhoto} onPendingFiles={setPendingFiles} max={1} label="Add photo" />
       </div>
 
       <Button type="submit" disabled={isPending || !make || !model} className="mt-2">
