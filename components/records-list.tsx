@@ -12,11 +12,12 @@ import type { ServiceRecord } from '@/lib/db/schema'
 type Props = {
   records: ServiceRecord[]
   carId: string
+  photosMap?: Record<string, string[]>
 }
 
 const PAGE_SIZE = 10
 
-export default function RecordsList({ records, carId }: Props) {
+export default function RecordsList({ records, carId, photosMap }: Props) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [dateFrom, setDateFrom] = useState('')
@@ -158,7 +159,7 @@ export default function RecordsList({ records, carId }: Props) {
             {visible.map((record) => (
               <div key={record.id} className="flex items-start gap-1">
                 <div className="flex-1 min-w-0">
-                  <RecordCard record={record} mileageWarning={mileageWarnings.has(record.id)} />
+                  <RecordCard record={record} mileageWarning={mileageWarnings.has(record.id)} photos={photosMap?.[record.id]} />
                 </div>
                 <Button variant="ghost" size="icon" asChild className="shrink-0 text-muted-foreground hover:text-foreground mt-0.5">
                   <Link href={`/cars/${carId}/records/${record.id}/edit`}>

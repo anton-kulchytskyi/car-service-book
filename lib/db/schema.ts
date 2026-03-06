@@ -18,6 +18,8 @@ export const cars = pgTable('cars', {
   vin: text('vin'),
   licensePlate: text('license_plate'),
   currentMileage: integer('current_mileage'),
+  photoUrl: text('photo_url'),
+  photoPublicId: text('photo_public_id'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 
@@ -41,6 +43,14 @@ export const maintenanceSchedules = pgTable('maintenance_schedules', {
   lastDoneKm: integer('last_done_km'),
   lastDoneDate: timestamp('last_done_date'),
   notes: text('notes'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+})
+
+export const recordPhotos = pgTable('record_photos', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  recordId: uuid('record_id').notNull().references(() => serviceRecords.id, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  publicId: text('public_id'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 
@@ -89,3 +99,4 @@ export type NewServiceRecord = typeof serviceRecords.$inferInsert
 export type MaintenanceSchedule = typeof maintenanceSchedules.$inferSelect
 export type NewMaintenanceSchedule = typeof maintenanceSchedules.$inferInsert
 export type CarOwnershipHistory = typeof carOwnershipHistory.$inferSelect
+export type RecordPhoto = typeof recordPhotos.$inferSelect

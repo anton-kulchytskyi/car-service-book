@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { and, eq, desc } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars, serviceRecords } from '@/lib/db/schema'
+import { cars, serviceRecords, recordPhotos } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { createRecordSchema } from '@/lib/validators'
 import { syncMaintenanceSchedules } from '@/lib/maintenance-sync'
@@ -36,7 +36,8 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const parsed = createRecordSchema.safeParse(body)
+  const { photos, ...recordBody } = body
+  const parsed = createRecordSchema.safeParse(recordBody)
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
   }
@@ -61,6 +62,12 @@ export async function POST(req: NextRequest) {
   const [currentCar] = await db.select({ currentMileage: cars.currentMileage }).from(cars).where(eq(cars.id, carId)).limit(1)
   if (currentCar && (currentCar.currentMileage == null || rest.mileage > currentCar.currentMileage)) {
     await db.update(cars).set({ currentMileage: rest.mileage }).where(eq(cars.id, carId))
+  }
+
+  if (Array.isArray(photos) && photos.length > 0) {
+    await db.insert(recordPhotos).values(
+      photos.map((p: { url: string; publicId: string }) => ({ recordId: record.id, url: p.url, publicId: p.publicId }))
+    )
   }
 
   await syncMaintenanceSchedules(carId)

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Combobox from '@/components/ui/combobox'
+import PhotoUpload, { type PhotoItem } from '@/components/photo-upload'
 import { formatLicensePlate } from '@/lib/utils'
 import { CAR_MAKES, getModels } from '@/lib/car-data'
 
@@ -17,6 +18,8 @@ type DefaultValues = {
   year: number
   vin?: string | null
   licensePlate?: string | null
+  photoUrl?: string | null
+  photoPublicId?: string | null
 }
 
 type Props = {
@@ -31,6 +34,11 @@ export default function CarForm({ carId, defaultValues }: Props) {
   const [model, setModel] = useState(defaultValues?.model ?? '')
   const [licensePlate, setLicensePlate] = useState(
     formatLicensePlate(defaultValues?.licensePlate ?? '')
+  )
+  const [photo, setPhoto] = useState<PhotoItem[]>(
+    defaultValues?.photoUrl && defaultValues?.photoPublicId
+      ? [{ url: defaultValues.photoUrl, publicId: defaultValues.photoPublicId }]
+      : []
   )
   const router = useRouter()
   const isEdit = !!carId
@@ -56,6 +64,8 @@ export default function CarForm({ carId, defaultValues }: Props) {
       year: Number(form.get('year')),
       vin: ((form.get('vin') as string) || '').toUpperCase() || undefined,
       licensePlate: licensePlate.replace(/\s+/g, '') || undefined,
+      photoUrl: photo[0]?.url ?? null,
+      photoPublicId: photo[0]?.publicId ?? null,
     }
 
     startTransition(async () => {
@@ -131,6 +141,11 @@ export default function CarForm({ carId, defaultValues }: Props) {
       <div className="grid gap-1.5">
         <Label htmlFor="vin">VIN</Label>
         <Input id="vin" name="vin" placeholder="1HGBH41JXMN109186" className="font-mono uppercase" defaultValue={defaultValues?.vin ?? ''} />
+      </div>
+
+      <div className="grid gap-1.5">
+        <Label>Car Photo</Label>
+        <PhotoUpload value={photo} onChange={setPhoto} max={1} label="Add photo" />
       </div>
 
       <Button type="submit" disabled={isPending || !make || !model} className="mt-2">

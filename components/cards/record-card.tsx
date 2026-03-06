@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -12,7 +13,7 @@ function formatDate(date: Date) {
   }).format(new Date(date))
 }
 
-export default function RecordCard({ record, mileageWarning }: { record: ServiceRecord; mileageWarning?: boolean }) {
+export default function RecordCard({ record, mileageWarning, photos }: { record: ServiceRecord; mileageWarning?: boolean; photos?: string[] }) {
   return (
     <Card>
       <CardContent className="pt-4 pb-4">
@@ -43,13 +44,29 @@ export default function RecordCard({ record, mileageWarning }: { record: Service
               </span>
             </div>
           </div>
-          {record.cost && (
-            <div className="text-right shrink-0">
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            {record.cost && (
               <p className="font-semibold text-sm">
                 {Number(record.cost).toLocaleString('uk-UA', { maximumFractionDigits: 0 })} грн
               </p>
-            </div>
-          )}
+            )}
+            {photos && photos.length > 0 && (
+              <div className="flex gap-1">
+                {photos.slice(0, 3).map((url) => (
+                  <a key={url} href={url} target="_blank" rel="noopener noreferrer">
+                    <div className="relative w-10 h-10 rounded overflow-hidden border">
+                      <Image src={url} alt="" fill className="object-cover" sizes="40px" />
+                    </div>
+                  </a>
+                ))}
+                {photos.length > 3 && (
+                  <div className="w-10 h-10 rounded border bg-muted flex items-center justify-center text-xs text-muted-foreground">
+                    +{photos.length - 3}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

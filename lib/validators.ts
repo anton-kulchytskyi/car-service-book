@@ -10,6 +10,8 @@ export const createCarSchema = z.object({
     .max(new Date().getFullYear() + 1, 'Year is too far in the future'),
   vin: z.string().optional(),
   licensePlate: z.string().optional(),
+  photoUrl: z.string().url().optional().nullable(),
+  photoPublicId: z.string().optional().nullable(),
 })
 
 export const updateCarSchema = createCarSchema.partial()

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars } from '@/lib/db/schema'
+import { cars, serviceRecords, recordPhotos } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { updateCarSchema } from '@/lib/validators'
+import { destroyImages } from '@/lib/cloudinary'
 
 type Params = { params: Promise<{ id: string }> }
 
@@ -80,6 +81,13 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   const car = await getOwnedCar(id, session.sub)
   if (!car) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
+  const allPhotos = await db
+    .select({ publicId: recordPhotos.publicId })
+    .from(recordPhotos)
+    .innerJoin(serviceRecords, eq(recordPhotos.recordId, serviceRecords.id))
+    .where(eq(serviceRecords.carId, id))
+
+  await destroyImages([car.photoPublicId, ...allPhotos.map((p) => p.publicId)])
   await db.delete(cars).where(eq(cars.id, id))
 
   return NextResponse.json({ success: true })

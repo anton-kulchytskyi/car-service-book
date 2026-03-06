@@ -2,8 +2,9 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { and, eq, desc, asc } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars, serviceRecords, maintenanceSchedules, carOwnershipHistory } from '@/lib/db/schema'
+import { cars, serviceRecords, maintenanceSchedules, carOwnershipHistory, recordPhotos } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -33,11 +34,21 @@ export default async function CarPage({ params }: Props) {
 
   if (!car) notFound()
 
-  const [records, schedules, ownershipHistory] = await Promise.all([
+  const [records, schedules, ownershipHistory, allRecordPhotos] = await Promise.all([
     db.select().from(serviceRecords).where(eq(serviceRecords.carId, id)).orderBy(desc(serviceRecords.date)),
     db.select().from(maintenanceSchedules).where(eq(maintenanceSchedules.carId, id)).orderBy(maintenanceSchedules.createdAt),
     db.select().from(carOwnershipHistory).where(eq(carOwnershipHistory.carId, id)).orderBy(asc(carOwnershipHistory.ownedFrom)),
+    db.select().from(recordPhotos).where(
+      eq(recordPhotos.recordId, serviceRecords.id)
+    ).innerJoin(serviceRecords, and(eq(recordPhotos.recordId, serviceRecords.id), eq(serviceRecords.carId, id))),
   ])
+
+  const photosMap = allRecordPhotos.reduce<Record<string, string[]>>((acc, row) => {
+    const key = row.record_photos.recordId
+    if (!acc[key]) acc[key] = []
+    acc[key].push(row.record_photos.url)
+    return acc
+  }, {})
 
   const totalCost = records.reduce((sum, r) => sum + (r.cost ? Number(r.cost) : 0), 0)
   const maxMileage = records.length > 0 ? Math.max(...records.map((r) => r.mileage)) : null
@@ -55,9 +66,16 @@ export default async function CarPage({ params }: Props) {
 
       {/* Car header */}
       <div className="flex items-start justify-between mb-2">
-        <div>
-          <h1 className="text-2xl font-bold">{car.make} {car.model}</h1>
-          <p className="text-muted-foreground">{car.year}</p>
+        <div className="flex items-center gap-4">
+          {car.photoUrl && (
+            <div className="relative w-16 h-16 rounded-lg overflow-hidden border shrink-0">
+              <Image src={car.photoUrl} alt={`${car.make} ${car.model}`} fill className="object-cover" sizes="64px" />
+            </div>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold">{car.make} {car.model}</h1>
+            <p className="text-muted-foreground">{car.year}</p>
+          </div>
         </div>
         <div className="flex gap-1">
           <Button variant="ghost" size="icon" asChild>
@@ -152,7 +170,7 @@ export default async function CarPage({ params }: Props) {
               </Button>
             </div>
           </div>
-          <RecordsList records={records} carId={id} />
+          <RecordsList records={records} carId={id} photosMap={photosMap} />
         </div>
       </div>
     </div>

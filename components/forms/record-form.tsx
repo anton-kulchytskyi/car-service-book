@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import PhotoUpload, { type PhotoItem } from '@/components/photo-upload'
 import { SERVICE_TYPES } from '@/lib/constants'
 
 type FieldErrors = Partial<Record<string, string[]>>
@@ -15,6 +16,7 @@ type DefaultValues = {
   type: string
   description: string
   cost?: string | null
+  photos?: PhotoItem[]
 }
 
 type Props = {
@@ -26,6 +28,7 @@ type Props = {
 export default function RecordForm({ carId, recordId, defaultValues }: Props) {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [isPending, startTransition] = useTransition()
+  const [photos, setPhotos] = useState<PhotoItem[]>(defaultValues?.photos ?? [])
   const router = useRouter()
   const isEdit = !!recordId
 
@@ -46,6 +49,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
       type: form.get('type'),
       description: form.get('description'),
       cost: (form.get('cost') as string) || undefined,
+      photos,
     }
 
     startTransition(async () => {
@@ -103,6 +107,11 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
       <div className="grid gap-1.5">
         <Label htmlFor="cost">Cost (UAH)</Label>
         <Input id="cost" name="cost" type="number" step="0.01" placeholder="1500.00" min={0} defaultValue={defaultValues?.cost ?? ''} />
+      </div>
+
+      <div className="grid gap-1.5">
+        <Label>Photos</Label>
+        <PhotoUpload value={photos} onChange={setPhotos} max={5} label="Add photos (receipts, parts, etc.)" />
       </div>
 
       <Button type="submit" disabled={isPending} className="mt-2">

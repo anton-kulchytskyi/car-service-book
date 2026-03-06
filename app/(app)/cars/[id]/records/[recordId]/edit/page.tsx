@@ -2,7 +2,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars, serviceRecords } from '@/lib/db/schema'
+import { cars, serviceRecords, recordPhotos } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { ArrowLeftIcon } from 'lucide-react'
 import RecordForm from '@/components/forms/record-form'
@@ -24,6 +24,11 @@ export default async function EditRecordPage({ params }: Props) {
 
   if (!result) notFound()
 
+  const photos = await db
+    .select({ url: recordPhotos.url, publicId: recordPhotos.publicId })
+    .from(recordPhotos)
+    .where(eq(recordPhotos.recordId, recordId))
+
   return (
     <div className="max-w-lg mx-auto">
       <Link
@@ -34,7 +39,11 @@ export default async function EditRecordPage({ params }: Props) {
         {result.car.make} {result.car.model}
       </Link>
       <h1 className="text-2xl font-bold mb-6">Edit Record</h1>
-      <RecordForm carId={id} recordId={recordId} defaultValues={result.record} />
+      <RecordForm
+        carId={id}
+        recordId={recordId}
+        defaultValues={{ ...result.record, photos: photos.filter((p) => p.publicId).map((p) => ({ url: p.url, publicId: p.publicId! })) }}
+      />
     </div>
   )
 }
