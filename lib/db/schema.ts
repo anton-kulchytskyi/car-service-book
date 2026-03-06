@@ -44,6 +44,17 @@ export const maintenanceSchedules = pgTable('maintenance_schedules', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 
+export const carOwnershipHistory = pgTable('car_ownership_history', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  carId: uuid('car_id').notNull().references(() => cars.id, { onDelete: 'cascade' }),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'set null' }),
+  ownerName: text('owner_name').notNull(),
+  ownerEmail: text('owner_email').notNull(),
+  ownedFrom: timestamp('owned_from').notNull(),
+  ownedTo: timestamp('owned_to'), // null = current owner
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+})
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   cars: many(cars),
@@ -63,6 +74,11 @@ export const maintenanceSchedulesRelations = relations(maintenanceSchedules, ({ 
   car: one(cars, { fields: [maintenanceSchedules.carId], references: [cars.id] }),
 }))
 
+export const carOwnershipHistoryRelations = relations(carOwnershipHistory, ({ one }) => ({
+  car: one(cars, { fields: [carOwnershipHistory.carId], references: [cars.id] }),
+  user: one(users, { fields: [carOwnershipHistory.userId], references: [users.id] }),
+}))
+
 // Types
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
@@ -72,3 +88,4 @@ export type ServiceRecord = typeof serviceRecords.$inferSelect
 export type NewServiceRecord = typeof serviceRecords.$inferInsert
 export type MaintenanceSchedule = typeof maintenanceSchedules.$inferSelect
 export type NewMaintenanceSchedule = typeof maintenanceSchedules.$inferInsert
+export type CarOwnershipHistory = typeof carOwnershipHistory.$inferSelect

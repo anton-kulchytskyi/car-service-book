@@ -14,13 +14,20 @@ type Props = {
   carId: string
 }
 
+const PAGE_SIZE = 10
+
 export default function RecordsList({ records, carId }: Props) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
   const query = search.trim().toLowerCase()
+
+  function resetVisible() {
+    setVisibleCount(PAGE_SIZE)
+  }
 
   const types = Array.from(new Set(records.map((r) => r.type)))
 
@@ -36,6 +43,9 @@ export default function RecordsList({ records, carId }: Props) {
   })
 
   const hasFilters = !!activeFilter || !!dateFrom || !!dateTo || !!search
+
+  const visible = filtered.slice(0, visibleCount)
+  const hasMore = filtered.length > visibleCount
 
   // Compute mileage warnings: sort by date ascending, flag records where mileage < previous
   const mileageWarnings = new Set<string>()
@@ -67,14 +77,14 @@ export default function RecordsList({ records, carId }: Props) {
         <Input
           type="date"
           value={dateFrom}
-          onChange={(e) => setDateFrom(e.target.value)}
+          onChange={(e) => { setDateFrom(e.target.value); resetVisible() }}
           className="w-auto flex-1 text-sm"
         />
         <span className="text-muted-foreground text-sm shrink-0">—</span>
         <Input
           type="date"
           value={dateTo}
-          onChange={(e) => setDateTo(e.target.value)}
+          onChange={(e) => { setDateTo(e.target.value); resetVisible() }}
           className="w-auto flex-1 text-sm"
         />
       </div>
@@ -84,7 +94,7 @@ export default function RecordsList({ records, carId }: Props) {
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
         <Input
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => { setSearch(e.target.value); resetVisible() }}
           placeholder="Search by type or description..."
           className="pl-9 pr-9"
         />
@@ -101,7 +111,7 @@ export default function RecordsList({ records, carId }: Props) {
       {types.length > 1 && (
         <div className="flex gap-2 flex-wrap mb-4">
           <button
-            onClick={() => setActiveFilter(null)}
+            onClick={() => { setActiveFilter(null); resetVisible() }}
             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
               activeFilter === null
                 ? 'bg-primary text-primary-foreground'
@@ -113,7 +123,7 @@ export default function RecordsList({ records, carId }: Props) {
           {types.map((type) => (
             <button
               key={type}
-              onClick={() => setActiveFilter(activeFilter === type ? null : type)}
+              onClick={() => { setActiveFilter(activeFilter === type ? null : type); resetVisible() }}
               className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                 activeFilter === type
                   ? 'bg-primary text-primary-foreground'
@@ -130,7 +140,7 @@ export default function RecordsList({ records, carId }: Props) {
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-muted-foreground">{filtered.length} of {records.length} records</p>
           <button
-            onClick={() => { setSearch(''); setDateFrom(''); setDateTo(''); setActiveFilter(null) }}
+            onClick={() => { setSearch(''); setDateFrom(''); setDateTo(''); setActiveFilter(null); resetVisible() }}
             className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
           >
             Clear all
@@ -143,21 +153,31 @@ export default function RecordsList({ records, carId }: Props) {
           No records found{query ? ` for "${search}"` : activeFilter ? ` for "${activeFilter}"` : ''}
         </p>
       ) : (
-        <div className="flex flex-col gap-3">
-          {filtered.map((record) => (
-            <div key={record.id} className="flex items-start gap-1">
-              <div className="flex-1 min-w-0">
-                <RecordCard record={record} mileageWarning={mileageWarnings.has(record.id)} />
+        <>
+          <div className="flex flex-col gap-3">
+            {visible.map((record) => (
+              <div key={record.id} className="flex items-start gap-1">
+                <div className="flex-1 min-w-0">
+                  <RecordCard record={record} mileageWarning={mileageWarnings.has(record.id)} />
+                </div>
+                <Button variant="ghost" size="icon" asChild className="shrink-0 text-muted-foreground hover:text-foreground mt-0.5">
+                  <Link href={`/cars/${carId}/records/${record.id}/edit`}>
+                    <PencilIcon className="w-4 h-4" />
+                  </Link>
+                </Button>
+                <DeleteRecordButton recordId={record.id} />
               </div>
-              <Button variant="ghost" size="icon" asChild className="shrink-0 text-muted-foreground hover:text-foreground mt-0.5">
-                <Link href={`/cars/${carId}/records/${record.id}/edit`}>
-                  <PencilIcon className="w-4 h-4" />
-                </Link>
-              </Button>
-              <DeleteRecordButton recordId={record.id} />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          {hasMore && (
+            <button
+              onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+              className="mt-4 w-full py-2 text-sm text-muted-foreground hover:text-foreground border border-dashed rounded-lg transition-colors"
+            >
+              Load more ({filtered.length - visibleCount} remaining)
+            </button>
+          )}
+        </>
       )}
     </div>
   )

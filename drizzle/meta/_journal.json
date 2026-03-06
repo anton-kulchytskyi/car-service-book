@@ -22,6 +22,13 @@
       "when": 1772666131254,
       "tag": "0002_naive_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1772804421360,
+      "tag": "0003_bent_slayback",
+      "breakpoints": true
     }
   ]
 }

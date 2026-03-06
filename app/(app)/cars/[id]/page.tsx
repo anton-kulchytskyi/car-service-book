@@ -1,17 +1,19 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { and, eq, desc } from 'drizzle-orm'
+import { and, eq, desc, asc } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { cars, serviceRecords, maintenanceSchedules } from '@/lib/db/schema'
+import { cars, serviceRecords, maintenanceSchedules, carOwnershipHistory } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth/session'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import RecordsList from '@/components/records-list'
 import DeleteCarButton from '@/components/delete-car-button'
+import TransferCarButton from '@/components/transfer-car-button'
 import MaintenanceSchedules from '@/components/maintenance-schedules'
 import CurrentMileage from '@/components/current-mileage'
-import { PlusIcon, ArrowLeftIcon, ReceiptIcon, ListIcon, PencilIcon } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { PlusIcon, ArrowLeftIcon, ReceiptIcon, ListIcon, PencilIcon, UsersIcon } from 'lucide-react'
 import { formatLicensePlate } from '@/lib/utils'
 
 type Props = { params: Promise<{ id: string }> }
@@ -30,9 +32,10 @@ export default async function CarPage({ params }: Props) {
 
   if (!car) notFound()
 
-  const [records, schedules] = await Promise.all([
+  const [records, schedules, ownershipHistory] = await Promise.all([
     db.select().from(serviceRecords).where(eq(serviceRecords.carId, id)).orderBy(desc(serviceRecords.date)),
     db.select().from(maintenanceSchedules).where(eq(maintenanceSchedules.carId, id)).orderBy(maintenanceSchedules.createdAt),
+    db.select().from(carOwnershipHistory).where(eq(carOwnershipHistory.carId, id)).orderBy(asc(carOwnershipHistory.ownedFrom)),
   ])
 
   const totalCost = records.reduce((sum, r) => sum + (r.cost ? Number(r.cost) : 0), 0)
@@ -61,6 +64,7 @@ export default async function CarPage({ params }: Props) {
               <PencilIcon className="w-4 h-4" />
             </Link>
           </Button>
+          <TransferCarButton carId={car.id} />
           <DeleteCarButton carId={car.id} />
         </div>
       </div>
@@ -69,6 +73,36 @@ export default async function CarPage({ params }: Props) {
         {car.licensePlate && <Badge variant="outline">{formatLicensePlate(car.licensePlate)}</Badge>}
         {car.vin && <Badge variant="secondary" className="font-mono text-xs uppercase">{car.vin}</Badge>}
       </div>
+
+      {ownershipHistory.length > 0 && (
+        <div className="mb-4">
+          <Tooltip>
+            <TooltipTrigger className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-default">
+              <UsersIcon className="w-3.5 h-3.5" />
+              {ownershipHistory.length} {ownershipHistory.length === 1 ? 'owner' : 'owners'}
+            </TooltipTrigger>
+            <TooltipContent side="bottom" align="start" className="p-3 max-w-xs">
+              <ol className="space-y-1.5">
+                {ownershipHistory.map((entry, i) => (
+                  <li key={entry.id} className="text-xs">
+                    <span className="font-medium">{entry.ownerName}</span>
+                    <span className="text-muted-foreground">
+                      {' — '}
+                      {new Date(entry.ownedFrom).toLocaleDateString('uk-UA')}
+                      {entry.ownedTo
+                        ? ` → ${new Date(entry.ownedTo).toLocaleDateString('uk-UA')}`
+                        : ' → now'}
+                    </span>
+                    {i === ownershipHistory.length - 1 && (
+                      <span className="ml-1 text-primary">(current)</span>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      )}
 
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="flex flex-col items-center justify-center rounded-lg border bg-muted/40 py-3 px-2 text-center">
