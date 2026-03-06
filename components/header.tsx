@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { CarIcon, UserIcon } from 'lucide-react'
 import LogoutButton from './logout-button'
+import ThemeToggle from './theme-toggle'
 
 type Props = { name: string }
 
@@ -13,10 +14,11 @@ export default function Header({ name }: Props) {
           Service Book
         </Link>
         <div className="flex items-center gap-3">
-          <Link href="/profile" className="flex items-center gap-1.5 text-sm text-muted-foreground hidden sm:flex hover:text-foreground">
+          <Link href="/profile" className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
             <UserIcon className="w-3.5 h-3.5" />
             {name}
           </Link>
+          <ThemeToggle />
           <LogoutButton />
         </div>
       </div>

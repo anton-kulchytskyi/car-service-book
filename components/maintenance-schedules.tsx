@@ -88,7 +88,7 @@ export default function MaintenanceSchedules({ carId, schedules, currentKm }: Pr
             const cfg = STATUS_CONFIG[status]
             return (
               <div key={s.id} className="flex items-center gap-3 rounded-lg border px-3 py-2.5">
-                <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded border ${cfg.className}`}>
+                <span className={`shrink-0 w-18 text-center text-xs font-medium px-2 py-0.5 rounded border ${cfg.className}`}>
                   {cfg.label}
                 </span>
                 <div className="flex-1 min-w-0">
