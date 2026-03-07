@@ -45,6 +45,9 @@ export default async function LandingPage() {
               </Button>
             ) : (
               <>
+                <Link href="/demo" className="text-sm text-muted-foreground hover:text-foreground hidden sm:block">
+                  Demo
+                </Link>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href="/login">Sign in</Link>
                 </Button>
@@ -79,7 +82,7 @@ export default async function LandingPage() {
                 <Link href="/register">Create free account</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/login">Sign in</Link>
+                <Link href="/demo">See demo</Link>
               </Button>
             </>
           )}
@@ -100,6 +103,22 @@ export default async function LandingPage() {
           ))}
         </div>
       </section>
+
+      {/* Demo CTA */}
+      {!session && (
+        <section className="border-t px-4 py-16">
+          <div className="container mx-auto max-w-xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">See for yourself</p>
+            <h2 className="text-2xl font-bold mb-3">Not sure what you&apos;re getting?</h2>
+            <p className="text-muted-foreground mb-6">
+              Browse a fully working demo with sample car data — service records, maintenance schedule, cost chart. No account needed.
+            </p>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/demo">Open demo →</Link>
+            </Button>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="border-t px-4 py-6 text-center text-sm text-muted-foreground">
