@@ -13,8 +13,8 @@ import CarActionsMenu from '@/components/car-actions-menu'
 import ExportPdfButton from '@/components/export-pdf-button-wrapper'
 import MaintenanceSchedules from '@/components/maintenance-schedules'
 import CurrentMileage from '@/components/current-mileage'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { PlusIcon, ArrowLeftIcon, UsersIcon } from 'lucide-react'
+import OwnersPopover from '@/components/owners-popover'
+import { PlusIcon, ArrowLeftIcon } from 'lucide-react'
 import { formatLicensePlate } from '@/lib/utils'
 
 import CostByTypeChart from '@/components/charts/cost-by-type-chart-wrapper'
@@ -100,31 +100,7 @@ export default async function CarPage({ params }: Props) {
           )}
 
           {ownershipHistory.length > 0 && (
-            <Tooltip>
-              <TooltipTrigger className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-default">
-                <UsersIcon className="w-3.5 h-3.5" />
-                {ownershipHistory.length} {ownershipHistory.length === 1 ? 'owner' : 'owners'}
-              </TooltipTrigger>
-              <TooltipContent side="bottom" align="start" className="p-3 max-w-xs">
-                <ol className="space-y-1.5">
-                  {ownershipHistory.map((entry, i) => (
-                    <li key={entry.id} className="text-xs">
-                      <span className="font-medium">{entry.ownerName}</span>
-                      <span className="text-muted-foreground">
-                        {' — '}
-                        {new Date(entry.ownedFrom).toLocaleDateString('uk-UA')}
-                        {entry.ownedTo
-                          ? ` → ${new Date(entry.ownedTo).toLocaleDateString('uk-UA')}`
-                          : ' → now'}
-                      </span>
-                      {i === ownershipHistory.length - 1 && (
-                        <span className="ml-1 text-primary">(current)</span>
-                      )}
-                    </li>
-                  ))}
-                </ol>
-              </TooltipContent>
-            </Tooltip>
+            <OwnersPopover owners={ownershipHistory} />
           )}
 
           <div className="mt-auto">
