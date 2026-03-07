@@ -91,6 +91,11 @@ export default function RegisterForm() {
               Sign in
             </Link>
           </p>
+          <p className="text-sm text-muted-foreground text-center">
+            <Link href="/demo" className="underline underline-offset-4 hover:text-foreground">
+              See a demo first
+            </Link>
+          </p>
         </CardFooter>
       </form>
     </Card>
