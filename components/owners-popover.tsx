@@ -6,8 +6,8 @@ import { UsersIcon } from 'lucide-react'
 type OwnerEntry = {
   id: string
   ownerName: string
-  ownedFrom: string
-  ownedTo: string | null
+  ownedFrom: Date | string
+  ownedTo: Date | string | null
 }
 
 export default function OwnersPopover({ owners }: { owners: OwnerEntry[] }) {
