@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getSession } from '@/lib/auth/session'
 import { Button } from '@/components/ui/button'
+import ThemeToggle from '@/components/theme-toggle'
 import { CarIcon, ClipboardListIcon, ShieldCheckIcon, WrenchIcon } from 'lucide-react'
 
 const features = [
@@ -39,6 +40,7 @@ export default async function LandingPage() {
             Service Book
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             {session ? (
               <Button size="sm" asChild>
                 <Link href="/dashboard">My Dashboard</Link>

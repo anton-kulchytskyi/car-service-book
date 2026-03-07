@@ -143,13 +143,13 @@ export default function DemoPage() {
             <SparklesIcon className="w-4 h-4 shrink-0" />
             This is a demo — explore the app before signing up
           </div>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             <Button size="sm" variant="secondary" asChild>
               <Link href="/register">Create free account</Link>
             </Button>
-            <Button size="sm" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground" asChild>
-              <Link href="/login">Sign in</Link>
-            </Button>
+            <Link href="/login" className="text-sm text-primary-foreground/80 hover:text-primary-foreground underline underline-offset-4">
+              Sign in
+            </Link>
           </div>
         </div>
       </div>
