@@ -244,5 +244,26 @@
   },
   "currentMileage": {
     "label": "Поточний пробіг"
+  },
+  "demoPage": {
+    "backHome": "На головну",
+    "banner": "Це демо — ознайомтесь з додатком перед реєстрацією",
+    "createAccount": "Створити безкоштовний акаунт",
+    "signIn": "Увійти",
+    "serviceHistory": "Історія обслуговування",
+    "maintenanceSchedule": "Розклад ТО",
+    "statusOverdue": "Прострочено",
+    "statusSoon": "Незабаром",
+    "statusOk": "OK",
+    "statusUnknown": "Немає даних",
+    "nextInKm": "через {km} км",
+    "kmOverdue": "{km} км прострочено",
+    "nextInDays": "через {days}д",
+    "daysOverdue": "{days}д прострочено"
+  },
+  "ownersPopover": {
+    "owner": "{count, plural, one {# власник} few {# власники} many {# власників} other {# власників}}",
+    "now": "зараз",
+    "current": "(поточний)"
   }
 }

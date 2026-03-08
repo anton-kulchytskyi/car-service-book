@@ -244,5 +244,26 @@
   },
   "currentMileage": {
     "label": "Current mileage"
+  },
+  "demoPage": {
+    "backHome": "Home",
+    "banner": "This is a demo — explore the app before signing up",
+    "createAccount": "Create free account",
+    "signIn": "Sign in",
+    "serviceHistory": "Service History",
+    "maintenanceSchedule": "Maintenance Schedule",
+    "statusOverdue": "Overdue",
+    "statusSoon": "Due soon",
+    "statusOk": "OK",
+    "statusUnknown": "No data",
+    "nextInKm": "in {km} km",
+    "kmOverdue": "{km} km overdue",
+    "nextInDays": "in {days}d",
+    "daysOverdue": "{days}d overdue"
+  },
+  "ownersPopover": {
+    "owner": "{count, plural, one {# owner} other {# owners}}",
+    "now": "now",
+    "current": "(current)"
   }
 }

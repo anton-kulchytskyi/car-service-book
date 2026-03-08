@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/navigation'
+import { getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -110,30 +111,33 @@ const chartData = [
 ]
 const totalCost = chartData.reduce((s, d) => s + d.total, 0)
 
-const STATUS_CONFIG = {
-  overdue: { label: 'Overdue',  className: 'bg-destructive/10 text-destructive border-destructive/20' },
-  soon:    { label: 'Due soon', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800' },
-  ok:      { label: 'OK',       className: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800' },
-  unknown: { label: 'No data',  className: 'bg-muted text-muted-foreground border-border' },
+const STATUS_CLASS = {
+  overdue: 'bg-destructive/10 text-destructive border-destructive/20',
+  soon:    'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800',
+  ok:      'bg-green-50 text-green-700 border-green-200 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800',
+  unknown: 'bg-muted text-muted-foreground border-border',
 }
 
-function nextServiceText(s: MaintenanceSchedule) {
+type TFn = (key: string, values?: Record<string, string | number>) => string
+
+function nextServiceText(s: MaintenanceSchedule, t: TFn) {
   const parts: string[] = []
   if (s.intervalKm && s.lastDoneKm != null) {
     const diff = s.lastDoneKm + s.intervalKm - CURRENT_KM
     const fmt = (n: number) => String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-    parts.push(diff > 0 ? `in ${fmt(diff)} km` : `${fmt(diff)} km overdue`)
+    parts.push(diff > 0 ? t('nextInKm', { km: fmt(diff) }) : t('kmOverdue', { km: fmt(diff) }))
   }
   if (s.intervalMonths && s.lastDoneDate) {
     const next = new Date(s.lastDoneDate)
     next.setMonth(next.getMonth() + s.intervalMonths)
     const diff = Math.floor((next.getTime() - Date.now()) / 86400000)
-    parts.push(diff > 0 ? `in ${diff}d` : `${Math.abs(diff)}d overdue`)
+    parts.push(diff > 0 ? t('nextInDays', { days: diff }) : t('daysOverdue', { days: Math.abs(diff) }))
   }
   return parts.join(' / ') || '—'
 }
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const t = await getTranslations('demoPage')
   return (
     <div className="min-h-screen bg-background">
       {/* Demo banner */}
@@ -142,19 +146,19 @@ export default function DemoPage() {
           <div className="flex items-center gap-3">
             <Link href="/" className="inline-flex items-center gap-1 text-sm text-primary-foreground/70 hover:text-primary-foreground">
               <ArrowLeftIcon className="w-4 h-4" />
-              Home
+              {t('backHome')}
             </Link>
             <span className="flex items-center gap-1.5 text-sm font-medium">
               <SparklesIcon className="w-4 h-4 shrink-0" />
-              This is a demo — explore the app before signing up
+              {t('banner')}
             </span>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <Button size="sm" variant="secondary" asChild>
-              <Link href="/register">Create free account</Link>
+              <Link href="/register">{t('createAccount')}</Link>
             </Button>
             <Link href="/login" className="text-sm text-primary-foreground/80 hover:text-primary-foreground underline underline-offset-4">
-              Sign in
+              {t('signIn')}
             </Link>
           </div>
         </div>
@@ -201,20 +205,19 @@ export default function DemoPage() {
             {/* Maintenance — top on mobile, right on desktop */}
             <div className="order-1 lg:order-2 pb-6 border-b lg:border-b-0 lg:border-l lg:pl-10">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold">Maintenance Schedule</h2>
+                <h2 className="text-lg font-semibold">{t('maintenanceSchedule')}</h2>
               </div>
               <div className="space-y-2">
                 {SCHEDULES.map((s) => {
                   const status = getMaintenanceStatus(s, CURRENT_KM)
-                  const cfg = STATUS_CONFIG[status]
                   return (
                     <div key={s.id} className="flex items-center gap-3 rounded-lg border px-3 py-2.5">
-                      <span className={`shrink-0 w-18 text-center text-xs font-medium px-2 py-0.5 rounded border ${cfg.className}`}>
-                        {cfg.label}
+                      <span className={`shrink-0 w-18 text-center text-xs font-medium px-2 py-0.5 rounded border ${STATUS_CLASS[status]}`}>
+                        {t(`status${status.charAt(0).toUpperCase() + status.slice(1)}` as 'statusOverdue' | 'statusSoon' | 'statusOk' | 'statusUnknown')}
                       </span>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{s.serviceName}</p>
-                        <p className="text-xs text-muted-foreground">{nextServiceText(s)}</p>
+                        <p className="text-xs text-muted-foreground">{nextServiceText(s, t)}</p>
                       </div>
                     </div>
                   )
@@ -225,7 +228,7 @@ export default function DemoPage() {
             {/* Service history — bottom on mobile, left on desktop */}
             <div className="order-2 lg:order-1">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Service History</h2>
+                <h2 className="text-lg font-semibold">{t('serviceHistory')}</h2>
               </div>
               <RecordsList records={RECORDS} carId={DEMO_CAR_ID} />
             </div>
