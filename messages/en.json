@@ -1,0 +1,307 @@
+{
+  "authLayout": {
+    "backHome": "Back to home"
+  },
+  "login": {
+    "title": "Welcome back",
+    "description": "Sign in to your account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "noAccount": "No account?",
+    "registerLink": "Register",
+    "seeDemo": "See a demo first",
+    "error": "Login failed. Please try again."
+  },
+  "register": {
+    "title": "Create account",
+    "description": "Start tracking your car service history",
+    "nameLabel": "Name",
+    "namePlaceholder": "John Doe",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordHint": "Minimum 8 characters",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "hasAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "seeDemo": "See a demo first",
+    "error": "Registration failed. Please try again."
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Sign in",
+      "getStarted": "Get started",
+      "dashboard": "My Garage"
+    },
+    "hero": {
+      "title": "Your car's service history, always at hand",
+      "description": "Service Book is a simple tool to log and track maintenance records for all your vehicles — oil changes, inspections, repairs, and more.",
+      "cta": "Create free account",
+      "ctaDemo": "See demo",
+      "ctaDashboard": "Go to Garage"
+    },
+    "features": {
+      "multipleCars": {
+        "title": "Multiple Cars",
+        "description": "Keep track of all your vehicles in one place."
+      },
+      "serviceRecords": {
+        "title": "Service Records",
+        "description": "Log every oil change, inspection, and repair with date and mileage."
+      },
+      "fullHistory": {
+        "title": "Full History",
+        "description": "See the complete service history of each car at a glance."
+      },
+      "yourData": {
+        "title": "Your Data",
+        "description": "Private and secure — only you can see your records."
+      }
+    },
+    "demo": {
+      "eyebrow": "See for yourself",
+      "title": "Not sure what you're getting?",
+      "description": "Browse a fully working demo with sample car data — service records, maintenance schedule, cost chart. No account needed.",
+      "button": "Open demo →"
+    },
+    "footer": "Service Book — track what matters for your car"
+  },
+  "header": {
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "My Garage",
+    "addCar": "Add Car",
+    "emptyTitle": "No cars yet",
+    "emptyDescription": "Add your first car to start tracking service history",
+    "emptyAction": "Add your first car"
+  },
+  "carCard": {
+    "records": "{count} records",
+    "overdue": "{count} overdue",
+    "dueSoon": "{count} due soon"
+  },
+  "carPage": {
+    "backToCars": "My Cars",
+    "serviceHistory": "Service History",
+    "addRecord": "Add Record",
+    "costChartTitle": "Costs by type",
+    "costChartSpent": "UAH spent",
+    "exportPdf": "Export PDF",
+    "generating": "Generating…"
+  },
+  "newCarPage": {
+    "backToCars": "My Cars",
+    "title": "Add Car"
+  },
+  "editCarPage": {
+    "back": "Back",
+    "title": "Edit Car"
+  },
+  "newRecordPage": {
+    "back": "Back",
+    "title": "Add Record"
+  },
+  "editRecordPage": {
+    "back": "Back",
+    "title": "Edit Record"
+  },
+  "profilePage": {
+    "backToDashboard": "Garage",
+    "title": "Profile",
+    "dangerZone": "Danger zone",
+    "dangerDescription": "Deleting your account will permanently remove all your cars and service records. This action cannot be undone."
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go home",
+    "dashboard": "My Garage"
+  },
+  "carForm": {
+    "makeLabel": "Make *",
+    "makePlaceholder": "Toyota",
+    "makeSearchPlaceholder": "Search make...",
+    "modelLabel": "Model *",
+    "modelSelectPlaceholder": "Select model",
+    "modelTypePlaceholder": "Type model",
+    "modelSearchPlaceholder": "Search model...",
+    "yearLabel": "Year *",
+    "licensePlateLabel": "License Plate",
+    "vinLabel": "VIN",
+    "photoLabel": "Car Photo",
+    "addPhotoLabel": "Add photo",
+    "photoHint": "JPEG, PNG, WebP, HEIC · up to 10 MB",
+    "photoError": "Photo upload failed. Please try again.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "addCar": "Add Car"
+  },
+  "recordForm": {
+    "dateLabel": "Date *",
+    "typeLabel": "Service Type *",
+    "mileageLabel": "Mileage (km) *",
+    "mileagePlaceholder": "50000",
+    "descriptionLabel": "Description *",
+    "descriptionPlaceholder": "Changed engine oil and filter",
+    "costLabel": "Cost (UAH)",
+    "photosLabel": "Photos",
+    "photosUploadLabel": "Add photos (receipts, parts, etc.)",
+    "photosHint": "JPEG, PNG, WebP, HEIC · up to 10 MB",
+    "photoError": "Photo upload failed. Please try again.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "addRecord": "Add Record"
+  },
+  "profileForm": {
+    "nameTitle": "Display name",
+    "nameLabel": "Name",
+    "nameError": "Failed to update name. Please try again.",
+    "nameSuccess": "Name updated successfully.",
+    "saveName": "Save name",
+    "saving": "Saving...",
+    "passwordTitle": "Change password",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
+    "passwordHint": "Minimum 8 characters",
+    "passwordError": "Failed to update password. Please try again.",
+    "passwordSuccess": "Password updated successfully.",
+    "updatePassword": "Update password"
+  },
+  "deleteAccount": {
+    "confirm": "Are you sure you want to delete your account?\n\nThis will permanently delete all your cars and service records. This action cannot be undone.",
+    "button": "Delete my account",
+    "deleting": "Deleting..."
+  },
+  "recordsList": {
+    "emptyTitle": "No records yet",
+    "emptyDescription": "Start tracking service history for this car",
+    "emptyAction": "Add first record",
+    "searchPlaceholder": "Search by type or description...",
+    "all": "All",
+    "clearAll": "Clear all",
+    "ofRecords": "{filtered} of {total} records",
+    "noResults": "No records found",
+    "noResultsFor": "No records found for \"{query}\"",
+    "loadMore": "Load more ({remaining} remaining)"
+  },
+  "recordCard": {
+    "km": "km",
+    "currency": "UAH",
+    "mileageWarning": "Mileage is lower than the previous record by date",
+    "deleteTitle": "Delete service record?",
+    "deleteDescription": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  },
+  "maintenance": {
+    "title": "Maintenance Schedule",
+    "add": "Add",
+    "empty": "No maintenance schedules yet. Add one to track when services are due.",
+    "statusOverdue": "Overdue",
+    "statusSoon": "Due soon",
+    "statusOk": "OK",
+    "statusUnknown": "No data",
+    "nextInKm": "in {km} km",
+    "kmOverdue": "{km} km overdue",
+    "nextInDays": "in {days}d",
+    "daysOverdue": "{days}d overdue",
+    "deleteTitle": "Delete schedule?",
+    "deleteDescription": "\"{name}\" will be removed. This cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  },
+  "scheduleForm": {
+    "addTitle": "Add Maintenance Schedule",
+    "editTitle": "Edit Maintenance Schedule",
+    "syncNote": "Last done date and mileage are synced automatically from your service history.",
+    "serviceLabel": "Service",
+    "servicePlaceholder": "e.g. Oil Change",
+    "suggestionsNote": "Pick from suggestions to auto-fill intervals",
+    "intervalKmLabel": "Every (km)",
+    "intervalKmPlaceholder": "e.g. 10000",
+    "intervalMonthsLabel": "Every (months)",
+    "intervalMonthsPlaceholder": "e.g. 6",
+    "notesLabel": "Notes (optional)",
+    "notesPlaceholder": "e.g. use 5W-30 Mobil",
+    "intervalRequired": "At least one interval (km or months) is required",
+    "saveError": "Failed to save. Please try again.",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
+  },
+  "carActionsMenu": {
+    "editCar": "Edit car",
+    "transferOwnership": "Transfer ownership",
+    "deleteCar": "Delete car",
+    "transferTitle": "Transfer Car Ownership",
+    "transferNote": "The car will be permanently transferred to the new owner. You will lose access to it.",
+    "newOwnerEmail": "New owner's email",
+    "transferring": "Transferring…",
+    "transfer": "Transfer",
+    "transferError": "Something went wrong",
+    "deleteTitle": "Delete this car?",
+    "deleteNote": "All service records, maintenance schedules and photos will be permanently deleted. This cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting…"
+  },
+  "currentMileage": {
+    "label": "Current mileage",
+    "km": "km"
+  },
+  "serviceTypes": {
+    "scheduled_service": "Scheduled Service",
+    "oil_change": "Oil Change",
+    "air_filter": "Air Filter",
+    "cabin_filter": "Cabin Filter",
+    "spark_plugs": "Spark Plugs",
+    "timing_belt": "Timing Belt",
+    "brake_pads": "Brake Pads",
+    "brake_discs": "Brake Discs",
+    "transmission_fluid": "Transmission Fluid",
+    "power_steering_fluid": "Power Steering Fluid",
+    "wheel_alignment": "Wheel Alignment",
+    "tire_replacement": "Tire Replacement",
+    "battery_replacement": "Battery Replacement",
+    "technical_inspection": "Technical Inspection",
+    "insurance": "Insurance",
+    "other": "Other"
+  },
+  "demoPage": {
+    "backHome": "Home",
+    "banner": "This is a demo — explore the app before signing up",
+    "createAccount": "Create free account",
+    "signIn": "Sign in",
+    "serviceHistory": "Service History",
+    "maintenanceSchedule": "Maintenance Schedule",
+    "statusOverdue": "Overdue",
+    "statusSoon": "Due soon",
+    "statusOk": "OK",
+    "statusUnknown": "No data",
+    "nextInKm": "in {km} km",
+    "kmOverdue": "{km} km overdue",
+    "nextInDays": "in {days}d",
+    "daysOverdue": "{days}d overdue",
+    "km": "km",
+    "desc_r1": "Castrol Edge 5W-30 5L, replaced oil filter",
+    "desc_r2": "Michelin CrossClimate2 205/55R16 — all four tires",
+    "desc_r3": "Replaced front brake pads and discs",
+    "desc_r4": "Castrol Edge 5W-30 5L, replaced oil filter",
+    "desc_r5": "Replaced engine air filter and cabin pollen filter",
+    "desc_r6": "Castrol Magnatec 5W-30 5L",
+    "desc_r7": "Annual technical inspection — passed"
+  },
+  "ownersPopover": {
+    "owner": "{count, plural, one {# owner} other {# owners}}",
+    "now": "now",
+    "current": "(current)"
+  }
+}

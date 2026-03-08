@@ -1,20 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 
 export default function DeleteAccountButton() {
+  const t = useTranslations('deleteAccount')
   const [isPending, setIsPending] = useState(false)
   const router = useRouter()
 
   async function handleDelete() {
-    if (
-      !confirm(
-        'Are you sure you want to delete your account?\n\nThis will permanently delete all your cars and service records. This action cannot be undone.'
-      )
-    )
-      return
+    if (!confirm(t('confirm'))) return
 
     setIsPending(true)
     try {
@@ -30,7 +27,7 @@ export default function DeleteAccountButton() {
 
   return (
     <Button variant="destructive" size="sm" onClick={handleDelete} disabled={isPending}>
-      {isPending ? 'Deleting...' : 'Delete my account'}
+      {isPending ? t('deleting') : t('button')}
     </Button>
   )
 }

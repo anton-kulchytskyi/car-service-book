@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { MoreHorizontalIcon, PencilIcon, ArrowRightLeftIcon, Trash2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,6 +26,7 @@ import {
 type Props = { carId: string }
 
 export default function CarActionsMenu({ carId }: Props) {
+  const t = useTranslations('carActionsMenu')
   const router = useRouter()
   const [transferOpen, setTransferOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -43,7 +45,7 @@ export default function CarActionsMenu({ carId }: Props) {
       })
       let data: { error?: string } = {}
       try { data = await res.json() } catch {}
-      if (!res.ok) { setTransferError(data.error ?? 'Something went wrong'); return }
+      if (!res.ok) { setTransferError(data.error ?? t('transferError')); return }
       setTransferOpen(false)
       router.push('/dashboard')
       router.refresh()
@@ -73,21 +75,21 @@ export default function CarActionsMenu({ carId }: Props) {
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
             <Link href={`/cars/${carId}/edit`} className="flex items-center gap-2">
-              <PencilIcon className="w-4 h-4" /> Edit car
+              <PencilIcon className="w-4 h-4" /> {t('editCar')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center gap-2"
             onClick={() => { setEmail(''); setTransferError(''); setTransferOpen(true) }}
           >
-            <ArrowRightLeftIcon className="w-4 h-4" /> Transfer ownership
+            <ArrowRightLeftIcon className="w-4 h-4" /> {t('transferOwnership')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center gap-2 text-destructive focus:text-destructive"
             onClick={() => setDeleteOpen(true)}
           >
-            <Trash2Icon className="w-4 h-4" /> Delete car
+            <Trash2Icon className="w-4 h-4" /> {t('deleteCar')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -96,14 +98,14 @@ export default function CarActionsMenu({ carId }: Props) {
       <Dialog open={transferOpen} onOpenChange={setTransferOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Transfer Car Ownership</DialogTitle>
+            <DialogTitle>{t('transferTitle')}</DialogTitle>
           </DialogHeader>
           <div className="py-2 space-y-3">
             <p className="text-sm text-muted-foreground">
-              The car will be permanently transferred to the new owner. You will lose access to it.
+              {t('transferNote')}
             </p>
             <div className="space-y-1.5">
-              <Label htmlFor="transfer-email">New owner&apos;s email</Label>
+              <Label htmlFor="transfer-email">{t('newOwnerEmail')}</Label>
               <Input
                 id="transfer-email"
                 type="email"
@@ -116,9 +118,9 @@ export default function CarActionsMenu({ carId }: Props) {
             {transferError && <p className="text-sm text-destructive">{transferError}</p>}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setTransferOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setTransferOpen(false)}>{t('cancel')}</Button>
             <Button onClick={handleTransfer} disabled={isPending || !email.trim()}>
-              {isPending ? 'Transferring…' : 'Transfer'}
+              {isPending ? t('transferring') : t('transfer')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -128,15 +130,15 @@ export default function CarActionsMenu({ carId }: Props) {
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete this car?</DialogTitle>
+            <DialogTitle>{t('deleteTitle')}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground py-2">
-            All service records, maintenance schedules and photos will be permanently deleted. This cannot be undone.
+            {t('deleteNote')}
           </p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteOpen(false)}>{t('cancel')}</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
-              {isPending ? 'Deleting…' : 'Delete'}
+              {isPending ? t('deleting') : t('delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

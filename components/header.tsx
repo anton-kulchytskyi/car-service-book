@@ -1,7 +1,8 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { CarIcon, UserIcon } from 'lucide-react'
 import LogoutButton from './logout-button'
 import ThemeToggle from './theme-toggle'
+import LocaleSwitcher from './locale-switcher'
 
 type Props = { name: string }
 
@@ -18,6 +19,7 @@ export default function Header({ name }: Props) {
             <UserIcon className="w-3.5 h-3.5" />
             {name}
           </Link>
+          <LocaleSwitcher />
           <ThemeToggle />
           <LogoutButton />
         </div>

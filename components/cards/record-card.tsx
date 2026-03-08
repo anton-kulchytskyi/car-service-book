@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
+import { useTranslations, useLocale } from 'next-intl'
+import { SERVICE_TYPES } from '@/lib/constants'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -12,8 +14,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { CalendarIcon, GaugeIcon, TriangleAlertIcon, PencilIcon, Trash2Icon } from 'lucide-react'
 import type { ServiceRecord } from '@/lib/db/schema'
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('uk-UA', {
+function formatDate(date: Date, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -28,6 +30,12 @@ type Props = {
 }
 
 export default function RecordCard({ record, carId, mileageWarning, photos }: Props) {
+  const t = useTranslations('recordCard')
+  const tTypes = useTranslations('serviceTypes')
+  const locale = useLocale()
+  const typeLabel = (SERVICE_TYPES as readonly string[]).includes(record.type)
+    ? tTypes(record.type as typeof SERVICE_TYPES[number])
+    : record.type
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const router = useRouter()
@@ -52,24 +60,24 @@ export default function RecordCard({ record, carId, mileageWarning, photos }: Pr
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap mb-2">
-                <Badge variant="secondary">{record.type}</Badge>
+                <Badge variant="secondary">{typeLabel}</Badge>
               </div>
               <p className="text-sm text-foreground">{record.description}</p>
               <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <CalendarIcon className="w-3 h-3" />
-                  {formatDate(record.date)}
+                  {formatDate(record.date, locale)}
                 </span>
                 <span className="flex items-center gap-1">
                   <GaugeIcon className="w-3 h-3" />
-                  {record.mileage.toLocaleString('uk-UA')} km
+                  {record.mileage.toLocaleString('uk-UA')} {t('km')}
                   {mileageWarning && (
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <TriangleAlertIcon className="w-4 h-4 text-amber-500 fill-amber-100 cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent>
-                        Mileage is lower than the previous record by date
+                        {t('mileageWarning')}
                       </TooltipContent>
                     </Tooltip>
                   )}
@@ -94,7 +102,7 @@ export default function RecordCard({ record, carId, mileageWarning, photos }: Pr
               </div>
               {record.cost && (
                 <p className="font-semibold text-sm">
-                  {Number(record.cost).toLocaleString('uk-UA', { maximumFractionDigits: 0 })} грн
+                  {Number(record.cost).toLocaleString('uk-UA', { maximumFractionDigits: 0 })} {t('currency')}
                 </p>
               )}
               {photos && photos.length > 0 && (
@@ -121,13 +129,13 @@ export default function RecordCard({ record, carId, mileageWarning, photos }: Pr
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete service record?</DialogTitle>
-            <DialogDescription>This action cannot be undone.</DialogDescription>
+            <DialogTitle>{t('deleteTitle')}</DialogTitle>
+            <DialogDescription>{t('deleteDescription')}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={isPending}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={isPending}>{t('cancel')}</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
-              {isPending ? 'Deleting...' : 'Delete'}
+              {isPending ? t('deleting') : t('delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

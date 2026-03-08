@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useRouter, Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,6 +12,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 type FieldErrors = Partial<Record<string, string[]>>
 
 export default function LoginForm() {
+  const t = useTranslations('login')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [globalError, setGlobalError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
@@ -39,7 +40,7 @@ export default function LoginForm() {
       } else if (typeof data.error === 'object') {
         setFieldErrors(data.error)
       } else {
-        setGlobalError('Login failed. Please try again.')
+        setGlobalError(t('error'))
       }
     })
   }
@@ -47,8 +48,8 @@ export default function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Welcome back</CardTitle>
-        <CardDescription>Sign in to your account</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="flex flex-col gap-4">
@@ -56,12 +57,12 @@ export default function LoginForm() {
             <p className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">{globalError}</p>
           )}
           <div className="grid gap-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="you@example.com" required autoComplete="email" />
+            <Label htmlFor="email">{t('emailLabel')}</Label>
+            <Input id="email" name="email" type="email" placeholder={t('emailPlaceholder')} required autoComplete="email" />
             {fieldErrors.email && <p className="text-sm text-destructive">{fieldErrors.email[0]}</p>}
           </div>
           <div className="grid gap-1.5">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t('passwordLabel')}</Label>
             <div className="relative">
               <Input id="password" name="password" type={showPassword ? 'text' : 'password'} required autoComplete="current-password" className="pr-10" />
               <button type="button" onClick={() => setShowPassword(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
@@ -73,17 +74,17 @@ export default function LoginForm() {
         </CardContent>
         <CardFooter className="flex flex-col gap-3 pt-2">
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Signing in...' : 'Sign in'}
+            {isPending ? t('submitting') : t('submit')}
           </Button>
           <p className="text-sm text-muted-foreground text-center">
-            No account?{' '}
+            {t('noAccount')}{' '}
             <Link href="/register" className="underline underline-offset-4 hover:text-foreground">
-              Register
+              {t('registerLink')}
             </Link>
           </p>
           <p className="text-sm text-muted-foreground text-center">
             <Link href="/demo" className="underline underline-offset-4 hover:text-foreground">
-              See a demo first
+              {t('seeDemo')}
             </Link>
           </p>
         </CardFooter>

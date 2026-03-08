@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { pdf } from '@react-pdf/renderer'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { DownloadIcon } from 'lucide-react'
 import CarServicePdf from '@/components/pdf/car-service-pdf'
@@ -16,6 +17,7 @@ type Props = {
 }
 
 export default function ExportPdfButton({ car, records, ownershipHistory, totalCost, currentKm }: Props) {
+  const t = useTranslations('carPage')
   const [isPending, setIsPending] = useState(false)
 
   async function handleExport() {
@@ -44,7 +46,7 @@ export default function ExportPdfButton({ car, records, ownershipHistory, totalC
   return (
     <Button variant="outline" size="sm" onClick={handleExport} disabled={isPending} className="cursor-pointer">
       <DownloadIcon className="w-4 h-4 mr-1.5" />
-      {isPending ? 'Generating…' : 'Export PDF'}
+      {isPending ? t('generating') : t('exportPdf')}
     </Button>
   )
 }

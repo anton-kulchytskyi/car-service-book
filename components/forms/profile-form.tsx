@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -11,6 +12,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 type FieldErrors = Partial<Record<string, string[]>>
 
 export default function ProfileForm({ name }: { name: string }) {
+  const t = useTranslations('profileForm')
   const router = useRouter()
 
   // Name section
@@ -41,7 +43,7 @@ export default function ProfileForm({ name }: { name: string }) {
         setNameSuccess(true)
         router.refresh()
       } else {
-        setNameError('Failed to update name. Please try again.')
+        setNameError(t('nameError'))
       }
     })
   }
@@ -69,7 +71,7 @@ export default function ProfileForm({ name }: { name: string }) {
       } else if (typeof data.error === 'object') {
         setPwErrors(data.error)
       } else {
-        setPwGlobalError('Failed to update password. Please try again.')
+        setPwGlobalError(t('passwordError'))
       }
     })
   }
@@ -79,7 +81,7 @@ export default function ProfileForm({ name }: { name: string }) {
       {/* Name */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Display name</CardTitle>
+          <CardTitle className="text-base">{t('nameTitle')}</CardTitle>
         </CardHeader>
         <form onSubmit={handleNameSubmit}>
           <CardContent className="flex flex-col gap-3">
@@ -87,10 +89,10 @@ export default function ProfileForm({ name }: { name: string }) {
               <p className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">{nameError}</p>
             )}
             {nameSuccess && (
-              <p className="text-sm text-green-600 bg-green-50 px-3 py-2 rounded-md">Name updated successfully.</p>
+              <p className="text-sm text-green-600 bg-green-50 px-3 py-2 rounded-md">{t('nameSuccess')}</p>
             )}
             <div className="grid gap-1.5">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{t('nameLabel')}</Label>
               <Input
                 id="name"
                 value={nameValue}
@@ -101,7 +103,7 @@ export default function ProfileForm({ name }: { name: string }) {
           </CardContent>
           <CardFooter className="pt-2">
             <Button type="submit" size="sm" disabled={isNamePending || nameValue === name}>
-              {isNamePending ? 'Saving...' : 'Save name'}
+              {isNamePending ? t('saving') : t('saveName')}
             </Button>
           </CardFooter>
         </form>
@@ -110,7 +112,7 @@ export default function ProfileForm({ name }: { name: string }) {
       {/* Password */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Change password</CardTitle>
+          <CardTitle className="text-base">{t('passwordTitle')}</CardTitle>
         </CardHeader>
         <form onSubmit={handlePasswordSubmit}>
           <CardContent className="flex flex-col gap-4">
@@ -118,10 +120,10 @@ export default function ProfileForm({ name }: { name: string }) {
               <p className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">{pwGlobalError}</p>
             )}
             {pwSuccess && (
-              <p className="text-sm text-green-600 bg-green-50 px-3 py-2 rounded-md">Password updated successfully.</p>
+              <p className="text-sm text-green-600 bg-green-50 px-3 py-2 rounded-md">{t('passwordSuccess')}</p>
             )}
             <div className="grid gap-1.5">
-              <Label htmlFor="currentPassword">Current password</Label>
+              <Label htmlFor="currentPassword">{t('currentPasswordLabel')}</Label>
               <div className="relative">
                 <Input
                   id="currentPassword"
@@ -144,7 +146,7 @@ export default function ProfileForm({ name }: { name: string }) {
               )}
             </div>
             <div className="grid gap-1.5">
-              <Label htmlFor="newPassword">New password</Label>
+              <Label htmlFor="newPassword">{t('newPasswordLabel')}</Label>
               <div className="relative">
                 <Input
                   id="newPassword"
@@ -163,7 +165,7 @@ export default function ProfileForm({ name }: { name: string }) {
                   {showNew ? <EyeOffIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground">Minimum 8 characters</p>
+              <p className="text-xs text-muted-foreground">{t('passwordHint')}</p>
               {pwErrors.newPassword && (
                 <p className="text-sm text-destructive">{pwErrors.newPassword[0]}</p>
               )}
@@ -171,7 +173,7 @@ export default function ProfileForm({ name }: { name: string }) {
           </CardContent>
           <CardFooter className="pt-2">
             <Button type="submit" size="sm" disabled={isPwPending}>
-              {isPwPending ? 'Saving...' : 'Update password'}
+              {isPwPending ? t('saving') : t('updatePassword')}
             </Button>
           </CardFooter>
         </form>

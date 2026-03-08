@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
+import { SERVICE_TYPES } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,26 +18,28 @@ import { getMaintenanceStatus } from '@/lib/utils'
 import type { MaintenanceSchedule } from '@/lib/db/schema'
 import { PlusIcon, PencilIcon, Trash2Icon } from 'lucide-react'
 
-const STATUS_CONFIG = {
-  overdue: { label: 'Overdue',  className: 'bg-destructive/10 text-destructive border-destructive/20' },
-  soon:    { label: 'Due soon', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800' },
-  ok:      { label: 'OK',       className: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800' },
-  unknown: { label: 'No data',  className: 'bg-muted text-muted-foreground border-border' },
+const STATUS_CLASS = {
+  overdue: 'bg-destructive/10 text-destructive border-destructive/20',
+  soon:    'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800',
+  ok:      'bg-green-50 text-green-700 border-green-200 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800',
+  unknown: 'bg-muted text-muted-foreground border-border',
 }
 
-function nextServiceText(schedule: MaintenanceSchedule, currentKm: number | null) {
+type TFn = (key: string, values?: Record<string, string | number>) => string
+
+function nextServiceText(schedule: MaintenanceSchedule, currentKm: number | null, t: TFn) {
   const parts: string[] = []
   if (schedule.intervalKm && schedule.lastDoneKm != null) {
     const next = schedule.lastDoneKm + schedule.intervalKm
     const diff = next - (currentKm ?? 0)
     const fmtKm = (n: number) => String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-    parts.push(diff > 0 ? `in ${fmtKm(diff)} km` : `${fmtKm(diff)} km overdue`)
+    parts.push(diff > 0 ? t('nextInKm', { km: fmtKm(diff) }) : t('kmOverdue', { km: fmtKm(diff) }))
   }
   if (schedule.intervalMonths && schedule.lastDoneDate) {
     const next = new Date(schedule.lastDoneDate)
     next.setMonth(next.getMonth() + schedule.intervalMonths)
     const diff = Math.floor((next.getTime() - Date.now()) / 86400000)
-    parts.push(diff > 0 ? `in ${diff}d` : `${Math.abs(diff)}d overdue`)
+    parts.push(diff > 0 ? t('nextInDays', { days: diff }) : t('daysOverdue', { days: Math.abs(diff) }))
   }
   return parts.join(' / ') || '—'
 }
@@ -47,6 +51,14 @@ type Props = {
 }
 
 export default function MaintenanceSchedules({ carId, schedules, currentKm }: Props) {
+  const t = useTranslations('maintenance')
+  const tTypes = useTranslations('serviceTypes')
+
+  function serviceLabel(name: string) {
+    return (SERVICE_TYPES as readonly string[]).includes(name)
+      ? tTypes(name as typeof SERVICE_TYPES[number])
+      : name
+  }
   const router = useRouter()
   const [addOpen, setAddOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<MaintenanceSchedule | null>(null)
@@ -70,30 +82,29 @@ export default function MaintenanceSchedules({ carId, schedules, currentKm }: Pr
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-semibold">Maintenance Schedule</h2>
+        <h2 className="text-lg font-semibold">{t('title')}</h2>
         <Button size="sm" variant="outline" onClick={() => setAddOpen(true)}>
           <PlusIcon className="w-4 h-4 mr-1" />
-          Add
+          {t('add')}
         </Button>
       </div>
 
       {schedules.length === 0 ? (
         <p className="text-sm text-muted-foreground py-4 text-center">
-          No maintenance schedules yet. Add one to track when services are due.
+          {t('empty')}
         </p>
       ) : (
         <div className="space-y-2">
           {schedules.map((s) => {
             const status = getMaintenanceStatus(s, currentKm)
-            const cfg = STATUS_CONFIG[status]
             return (
               <div key={s.id} className="flex items-center gap-3 rounded-lg border px-3 py-2.5">
-                <span className={`shrink-0 w-18 text-center text-xs font-medium px-2 py-0.5 rounded border ${cfg.className}`}>
-                  {cfg.label}
+                <span className={`shrink-0 w-18 text-center text-xs font-medium px-2 py-0.5 rounded border ${STATUS_CLASS[status]}`}>
+                  {t(`status${status.charAt(0).toUpperCase() + status.slice(1)}` as 'statusOverdue' | 'statusSoon' | 'statusOk' | 'statusUnknown')}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">{s.serviceName}</p>
-                  <p className="text-xs text-muted-foreground">{nextServiceText(s, currentKm)}</p>
+                  <p className="font-medium text-sm truncate">{serviceLabel(s.serviceName)}</p>
+                  <p className="text-xs text-muted-foreground">{nextServiceText(s, currentKm, t)}</p>
                 </div>
                 <div className="flex gap-1 shrink-0">
                   <Button variant="ghost" size="icon" className="w-7 h-7" onClick={() => setEditTarget(s)}>
@@ -129,15 +140,15 @@ export default function MaintenanceSchedules({ carId, schedules, currentKm }: Pr
       <Dialog open={!!deleteTarget} onOpenChange={(o) => { if (!o) setDeleteTarget(null) }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete schedule?</DialogTitle>
+            <DialogTitle>{t('deleteTitle')}</DialogTitle>
             <DialogDescription>
-              &ldquo;{deleteTarget?.serviceName}&rdquo; will be removed. This cannot be undone.
+              {t('deleteDescription', { name: deleteTarget?.serviceName ?? '' })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} disabled={isDeleting}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} disabled={isDeleting}>{t('cancel')}</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? 'Deleting...' : 'Delete'}
+              {isDeleting ? t('deleting') : t('delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

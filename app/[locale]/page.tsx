@@ -1,34 +1,20 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { getSession } from '@/lib/auth/session'
+import { getTranslations } from 'next-intl/server'
 import { Button } from '@/components/ui/button'
 import ThemeToggle from '@/components/theme-toggle'
+import LocaleSwitcher from '@/components/locale-switcher'
 import { CarIcon, ClipboardListIcon, ShieldCheckIcon, WrenchIcon } from 'lucide-react'
 
-const features = [
-  {
-    icon: CarIcon,
-    title: 'Multiple Cars',
-    description: 'Keep track of all your vehicles in one place.',
-  },
-  {
-    icon: WrenchIcon,
-    title: 'Service Records',
-    description: 'Log every oil change, inspection, and repair with date and mileage.',
-  },
-  {
-    icon: ClipboardListIcon,
-    title: 'Full History',
-    description: 'See the complete service history of each car at a glance.',
-  },
-  {
-    icon: ShieldCheckIcon,
-    title: 'Your Data',
-    description: 'Private and secure — only you can see your records.',
-  },
-]
-
 export default async function LandingPage() {
-  const session = await getSession()
+  const [session, t] = await Promise.all([getSession(), getTranslations('landing')])
+
+  const features = [
+    { icon: CarIcon,           title: t('features.multipleCars.title'),    description: t('features.multipleCars.description') },
+    { icon: WrenchIcon,        title: t('features.serviceRecords.title'),   description: t('features.serviceRecords.description') },
+    { icon: ClipboardListIcon, title: t('features.fullHistory.title'),      description: t('features.fullHistory.description') },
+    { icon: ShieldCheckIcon,   title: t('features.yourData.title'),         description: t('features.yourData.description') },
+  ]
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -40,21 +26,19 @@ export default async function LandingPage() {
             Service Book
           </div>
           <div className="flex items-center gap-2">
+            <LocaleSwitcher />
             <ThemeToggle />
             {session ? (
               <Button size="sm" asChild>
-                <Link href="/dashboard">My Dashboard</Link>
+                <Link href="/dashboard">{t('nav.dashboard')}</Link>
               </Button>
             ) : (
               <>
-                <Link href="/demo" className="text-sm text-muted-foreground hover:text-foreground hidden sm:block">
-                  Demo
-                </Link>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href="/login">Sign in</Link>
+                  <Link href="/login">{t('nav.signIn')}</Link>
                 </Button>
                 <Button size="sm" asChild>
-                  <Link href="/register">Get started</Link>
+                  <Link href="/register">{t('nav.getStarted')}</Link>
                 </Button>
               </>
             )}
@@ -68,23 +52,23 @@ export default async function LandingPage() {
           <CarIcon className="w-8 h-8" />
         </div>
         <h1 className="text-4xl font-bold tracking-tight mb-4 max-w-lg">
-          Your car's service history, always at hand
+          {t('hero.title')}
         </h1>
         <p className="text-lg text-muted-foreground mb-8 max-w-md">
-          Service Book is a simple tool to log and track maintenance records for all your vehicles — oil changes, inspections, repairs, and more.
+          {t('hero.description')}
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           {session ? (
             <Button size="lg" asChild>
-              <Link href="/dashboard">Go to Dashboard</Link>
+              <Link href="/dashboard">{t('hero.ctaDashboard')}</Link>
             </Button>
           ) : (
             <>
               <Button size="lg" asChild>
-                <Link href="/register">Create free account</Link>
+                <Link href="/register">{t('hero.cta')}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/demo">See demo</Link>
+                <Link href="/demo">{t('hero.ctaDemo')}</Link>
               </Button>
             </>
           )}
@@ -110,13 +94,13 @@ export default async function LandingPage() {
       {!session && (
         <section className="border-t px-4 py-16">
           <div className="container mx-auto max-w-xl text-center">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">See for yourself</p>
-            <h2 className="text-2xl font-bold mb-3">Not sure what you&apos;re getting?</h2>
-            <p className="text-muted-foreground mb-6">
-              Browse a fully working demo with sample car data — service records, maintenance schedule, cost chart. No account needed.
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              {t('demo.eyebrow')}
             </p>
+            <h2 className="text-2xl font-bold mb-3">{t('demo.title')}</h2>
+            <p className="text-muted-foreground mb-6">{t('demo.description')}</p>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/demo">Open demo →</Link>
+              <Link href="/demo">{t('demo.button')}</Link>
             </Button>
           </div>
         </section>
@@ -124,7 +108,7 @@ export default async function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t px-4 py-6 text-center text-sm text-muted-foreground">
-        Service Book — track what matters for your car
+        {t('footer')}
       </footer>
     </div>
   )

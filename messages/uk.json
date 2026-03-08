@@ -1,0 +1,307 @@
+{
+  "authLayout": {
+    "backHome": "На головну"
+  },
+  "login": {
+    "title": "З поверненням",
+    "description": "Увійдіть до свого акаунту",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Пароль",
+    "submit": "Увійти",
+    "submitting": "Вхід...",
+    "noAccount": "Немає акаунту?",
+    "registerLink": "Зареєструватись",
+    "seeDemo": "Спочатку подивитись демо",
+    "error": "Не вдалось увійти. Спробуйте ще раз."
+  },
+  "register": {
+    "title": "Створити акаунт",
+    "description": "Почніть відстежувати обслуговування вашого авто",
+    "nameLabel": "Ім'я",
+    "namePlaceholder": "Іван Іваненко",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Пароль",
+    "passwordHint": "Мінімум 8 символів",
+    "submit": "Створити акаунт",
+    "submitting": "Створення акаунту...",
+    "hasAccount": "Вже є акаунт?",
+    "signInLink": "Увійти",
+    "seeDemo": "Спочатку подивитись демо",
+    "error": "Не вдалось зареєструватись. Спробуйте ще раз."
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Увійти",
+      "getStarted": "Почати",
+      "dashboard": "Мій гараж"
+    },
+    "hero": {
+      "title": "Історія обслуговування авто — завжди під рукою",
+      "description": "Service Book — простий інструмент для ведення записів про обслуговування всіх ваших авто: заміна масла, ТО, ремонти тощо.",
+      "cta": "Створити безкоштовний акаунт",
+      "ctaDemo": "Подивитись демо",
+      "ctaDashboard": "Перейти до гаражу"
+    },
+    "features": {
+      "multipleCars": {
+        "title": "Кілька авто",
+        "description": "Ведіть облік усіх ваших транспортних засобів в одному місці."
+      },
+      "serviceRecords": {
+        "title": "Записи обслуговування",
+        "description": "Фіксуйте кожну заміну масла, ТО та ремонт з датою та пробігом."
+      },
+      "fullHistory": {
+        "title": "Повна історія",
+        "description": "Перегляньте всю історію обслуговування кожного авто з першого погляду."
+      },
+      "yourData": {
+        "title": "Ваші дані",
+        "description": "Приватно та безпечно — тільки ви бачите свої записи."
+      }
+    },
+    "demo": {
+      "eyebrow": "Переконайтесь самі",
+      "title": "Не впевнені що тут пропонують?",
+      "description": "Перегляньте повноцінне демо з тестовими даними — записи обслуговування, графік витрат, розклад ТО. Без реєстрації.",
+      "button": "Відкрити демо →"
+    },
+    "footer": "Service Book — стежте за тим, що важливо для вашого авто"
+  },
+  "header": {
+    "logout": "Вийти"
+  },
+  "dashboard": {
+    "title": "Мій гараж",
+    "addCar": "Додати авто",
+    "emptyTitle": "Поки немає авто",
+    "emptyDescription": "Додайте перше авто щоб почати відстежувати обслуговування",
+    "emptyAction": "Додати перше авто"
+  },
+  "carCard": {
+    "records": "{count} записів",
+    "overdue": "{count} прострочено",
+    "dueSoon": "{count} незабаром"
+  },
+  "carPage": {
+    "backToCars": "Мої авто",
+    "serviceHistory": "Історія обслуговування",
+    "addRecord": "Додати запис",
+    "costChartTitle": "Витрати за типом",
+    "costChartSpent": "грн витрачено",
+    "exportPdf": "Експорт в PDF",
+    "generating": "Генерація…"
+  },
+  "newCarPage": {
+    "backToCars": "Мої авто",
+    "title": "Додати авто"
+  },
+  "editCarPage": {
+    "back": "Назад",
+    "title": "Редагувати авто"
+  },
+  "newRecordPage": {
+    "back": "Назад",
+    "title": "Додати запис"
+  },
+  "editRecordPage": {
+    "back": "Назад",
+    "title": "Редагувати запис"
+  },
+  "profilePage": {
+    "backToDashboard": "Гараж",
+    "title": "Профіль",
+    "dangerZone": "Небезпечна зона",
+    "dangerDescription": "Видалення акаунту назавжди видалить всі ваші авто та записи обслуговування. Цю дію не можна скасувати."
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Сторінку не знайдено",
+    "description": "Сторінки, яку ви шукаєте, не існує або вона була переміщена.",
+    "goHome": "На головну",
+    "dashboard": "Мій гараж"
+  },
+  "carForm": {
+    "makeLabel": "Марка *",
+    "makePlaceholder": "Toyota",
+    "makeSearchPlaceholder": "Пошук марки...",
+    "modelLabel": "Модель *",
+    "modelSelectPlaceholder": "Оберіть модель",
+    "modelTypePlaceholder": "Введіть модель",
+    "modelSearchPlaceholder": "Пошук моделі...",
+    "yearLabel": "Рік *",
+    "licensePlateLabel": "Номерний знак",
+    "vinLabel": "VIN",
+    "photoLabel": "Фото авто",
+    "addPhotoLabel": "Додати фото",
+    "photoHint": "JPEG, PNG, WebP, HEIC · до 10 МБ",
+    "photoError": "Не вдалось завантажити фото. Спробуйте ще раз.",
+    "saving": "Збереження...",
+    "saveChanges": "Зберегти зміни",
+    "addCar": "Додати авто"
+  },
+  "recordForm": {
+    "dateLabel": "Дата *",
+    "typeLabel": "Тип обслуговування *",
+    "mileageLabel": "Пробіг (км) *",
+    "mileagePlaceholder": "50000",
+    "descriptionLabel": "Опис *",
+    "descriptionPlaceholder": "Замінено моторне масло та фільтр",
+    "costLabel": "Вартість (грн)",
+    "photosLabel": "Фото",
+    "photosUploadLabel": "Додати фото (чеки, деталі тощо)",
+    "photosHint": "JPEG, PNG, WebP, HEIC · до 10 МБ",
+    "photoError": "Не вдалось завантажити фото. Спробуйте ще раз.",
+    "saving": "Збереження...",
+    "saveChanges": "Зберегти зміни",
+    "addRecord": "Додати запис"
+  },
+  "profileForm": {
+    "nameTitle": "Відображуване ім'я",
+    "nameLabel": "Ім'я",
+    "nameError": "Не вдалось оновити ім'я. Спробуйте ще раз.",
+    "nameSuccess": "Ім'я успішно оновлено.",
+    "saveName": "Зберегти ім'я",
+    "saving": "Збереження...",
+    "passwordTitle": "Змінити пароль",
+    "currentPasswordLabel": "Поточний пароль",
+    "newPasswordLabel": "Новий пароль",
+    "passwordHint": "Мінімум 8 символів",
+    "passwordError": "Не вдалось оновити пароль. Спробуйте ще раз.",
+    "passwordSuccess": "Пароль успішно оновлено.",
+    "updatePassword": "Оновити пароль"
+  },
+  "deleteAccount": {
+    "confirm": "Ви впевнені що хочете видалити акаунт?\n\nЦе назавжди видалить всі ваші авто та записи обслуговування. Цю дію не можна скасувати.",
+    "button": "Видалити акаунт",
+    "deleting": "Видалення..."
+  },
+  "recordsList": {
+    "emptyTitle": "Записів ще немає",
+    "emptyDescription": "Почніть відстежувати обслуговування цього авто",
+    "emptyAction": "Додати перший запис",
+    "searchPlaceholder": "Пошук за типом або описом...",
+    "all": "Всі",
+    "clearAll": "Скинути все",
+    "ofRecords": "{filtered} з {total} записів",
+    "noResults": "Записів не знайдено",
+    "noResultsFor": "Записів не знайдено для \"{query}\"",
+    "loadMore": "Завантажити більше ({remaining} залишилось)"
+  },
+  "recordCard": {
+    "km": "км",
+    "currency": "грн",
+    "mileageWarning": "Пробіг менший ніж у попередньому записі за датою",
+    "deleteTitle": "Видалити запис обслуговування?",
+    "deleteDescription": "Цю дію не можна скасувати.",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "deleting": "Видалення..."
+  },
+  "maintenance": {
+    "title": "Розклад ТО",
+    "add": "Додати",
+    "empty": "Розкладу ТО ще немає. Додайте один щоб відстежувати терміни.",
+    "statusOverdue": "Прострочено",
+    "statusSoon": "Незабаром",
+    "statusOk": "OK",
+    "statusUnknown": "Немає даних",
+    "nextInKm": "через {km} км",
+    "kmOverdue": "{km} км прострочено",
+    "nextInDays": "через {days}д",
+    "daysOverdue": "{days}д прострочено",
+    "deleteTitle": "Видалити розклад?",
+    "deleteDescription": "\"{name}\" буде видалено. Цю дію не можна скасувати.",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "deleting": "Видалення..."
+  },
+  "scheduleForm": {
+    "addTitle": "Додати розклад ТО",
+    "editTitle": "Редагувати розклад ТО",
+    "syncNote": "Дата та пробіг останнього виконання синхронізуються автоматично з вашої історії обслуговування.",
+    "serviceLabel": "Послуга",
+    "servicePlaceholder": "наприклад Заміна масла",
+    "suggestionsNote": "Оберіть з підказок для автозаповнення інтервалів",
+    "intervalKmLabel": "Кожні (км)",
+    "intervalKmPlaceholder": "напр. 10000",
+    "intervalMonthsLabel": "Кожні (місяців)",
+    "intervalMonthsPlaceholder": "напр. 6",
+    "notesLabel": "Нотатки (необов'язково)",
+    "notesPlaceholder": "напр. 5W-30 Mobil",
+    "intervalRequired": "Потрібен хоча б один інтервал (км або місяці)",
+    "saveError": "Не вдалось зберегти. Спробуйте ще раз.",
+    "cancel": "Скасувати",
+    "save": "Зберегти",
+    "saving": "Збереження..."
+  },
+  "carActionsMenu": {
+    "editCar": "Редагувати авто",
+    "transferOwnership": "Передати право власності",
+    "deleteCar": "Видалити авто",
+    "transferTitle": "Передача права власності",
+    "transferNote": "Авто буде назавжди передано новому власнику. Ви втратите до нього доступ.",
+    "newOwnerEmail": "Email нового власника",
+    "transferring": "Передача…",
+    "transfer": "Передати",
+    "transferError": "Щось пішло не так",
+    "deleteTitle": "Видалити це авто?",
+    "deleteNote": "Всі записи обслуговування, розклади ТО та фото будуть назавжди видалені. Цю дію не можна скасувати.",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "deleting": "Видалення…"
+  },
+  "currentMileage": {
+    "label": "Поточний пробіг",
+    "km": "км"
+  },
+  "serviceTypes": {
+    "scheduled_service": "Планове ТО",
+    "oil_change": "Заміна масла",
+    "air_filter": "Повітряний фільтр",
+    "cabin_filter": "Салонний фільтр",
+    "spark_plugs": "Свічки запалювання",
+    "timing_belt": "Ремінь ГРМ",
+    "brake_pads": "Гальмівні колодки",
+    "brake_discs": "Гальмівні диски",
+    "transmission_fluid": "Трансмісійна рідина",
+    "power_steering_fluid": "Рідина ГПК",
+    "wheel_alignment": "Розвал-сходження",
+    "tire_replacement": "Заміна шин",
+    "battery_replacement": "Заміна акумулятора",
+    "technical_inspection": "Техогляд",
+    "insurance": "Страховка",
+    "other": "Інше"
+  },
+  "demoPage": {
+    "backHome": "На головну",
+    "banner": "Це демо — ознайомтесь з додатком перед реєстрацією",
+    "createAccount": "Створити безкоштовний акаунт",
+    "signIn": "Увійти",
+    "serviceHistory": "Історія обслуговування",
+    "maintenanceSchedule": "Розклад ТО",
+    "statusOverdue": "Прострочено",
+    "statusSoon": "Незабаром",
+    "statusOk": "OK",
+    "statusUnknown": "Немає даних",
+    "nextInKm": "через {km} км",
+    "kmOverdue": "{km} км прострочено",
+    "nextInDays": "через {days}д",
+    "daysOverdue": "{days}д прострочено",
+    "km": "км",
+    "desc_r1": "Castrol Edge 5W-30 5L, замінено масляний фільтр",
+    "desc_r2": "Michelin CrossClimate2 205/55R16 — всі чотири колеса",
+    "desc_r3": "Замінено передні гальмівні колодки та диски",
+    "desc_r4": "Castrol Edge 5W-30 5L, замінено масляний фільтр",
+    "desc_r5": "Замінено повітряний фільтр двигуна та салонний фільтр",
+    "desc_r6": "Castrol Magnatec 5W-30 5L",
+    "desc_r7": "Щорічний техогляд — пройдено"
+  },
+  "ownersPopover": {
+    "owner": "{count, plural, one {# власник} few {# власники} many {# власників} other {# власників}}",
+    "now": "зараз",
+    "current": "(поточний)"
+  }
+}

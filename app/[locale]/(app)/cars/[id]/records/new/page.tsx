@@ -1,5 +1,7 @@
-import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { Link } from '@/i18n/navigation'
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { cars } from '@/lib/db/schema'
@@ -11,7 +13,7 @@ type Props = { params: Promise<{ id: string }> }
 
 export default async function NewRecordPage({ params }: Props) {
   const session = await getSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${await getLocale()}/login`)
 
   const { id } = await params
 
@@ -22,6 +24,7 @@ export default async function NewRecordPage({ params }: Props) {
     .limit(1)
 
   if (!car) notFound()
+  const t = await getTranslations('newRecordPage')
 
   return (
     <div className="max-w-lg mx-auto">
@@ -30,9 +33,9 @@ export default async function NewRecordPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        {car.make} {car.model}
+        {t('back')}
       </Link>
-      <h1 className="text-2xl font-bold mb-6">Add Service Record</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
       <RecordForm carId={id} />
     </div>
   )

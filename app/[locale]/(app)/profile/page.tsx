@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
@@ -11,10 +12,11 @@ import DeleteAccountButton from '@/components/delete-account-button'
 
 export default async function ProfilePage() {
   const session = await getSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${await getLocale()}/login`)
 
   const [user] = await db.select().from(users).where(eq(users.id, session.sub)).limit(1)
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
+  const t = await getTranslations('profilePage')
 
   return (
     <div className="max-w-lg mx-auto">
@@ -23,10 +25,10 @@ export default async function ProfilePage() {
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        Dashboard
+        {t('backToDashboard')}
       </Link>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Profile</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
         <p className="text-sm text-muted-foreground mt-1">{user.email}</p>
       </div>
 
@@ -35,9 +37,9 @@ export default async function ProfilePage() {
       <Separator className="my-8" />
 
       <div>
-        <h2 className="text-base font-semibold text-destructive mb-1">Danger zone</h2>
+        <h2 className="text-base font-semibold text-destructive mb-1">{t('dangerZone')}</h2>
         <p className="text-sm text-muted-foreground mb-4">
-          Deleting your account will permanently remove all your cars and service records. This action cannot be undone.
+          {t('dangerDescription')}
         </p>
         <DeleteAccountButton />
       </div>
