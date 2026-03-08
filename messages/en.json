@@ -35,14 +35,14 @@
     "nav": {
       "signIn": "Sign in",
       "getStarted": "Get started",
-      "dashboard": "My Dashboard"
+      "dashboard": "My Garage"
     },
     "hero": {
       "title": "Your car's service history, always at hand",
       "description": "Service Book is a simple tool to log and track maintenance records for all your vehicles — oil changes, inspections, repairs, and more.",
       "cta": "Create free account",
       "ctaDemo": "See demo",
-      "ctaDashboard": "Go to Dashboard"
+      "ctaDashboard": "Go to Garage"
     },
     "features": {
       "multipleCars": {
@@ -74,7 +74,7 @@
     "logout": "Logout"
   },
   "dashboard": {
-    "title": "My Cars",
+    "title": "My Garage",
     "addCar": "Add Car",
     "emptyTitle": "No cars yet",
     "emptyDescription": "Add your first car to start tracking service history",
@@ -107,7 +107,7 @@
     "title": "Edit Record"
   },
   "profilePage": {
-    "backToDashboard": "Dashboard",
+    "backToDashboard": "Garage",
     "title": "Profile",
     "dangerZone": "Danger zone",
     "dangerDescription": "Deleting your account will permanently remove all your cars and service records. This action cannot be undone."
@@ -117,7 +117,7 @@
     "title": "Page not found",
     "description": "The page you're looking for doesn't exist or has been moved.",
     "goHome": "Go home",
-    "dashboard": "My Dashboard"
+    "dashboard": "My Garage"
   },
   "carForm": {
     "makeLabel": "Make *",
