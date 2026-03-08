@@ -1,3 +1,75 @@
 {
-  "_placeholder": "Translations coming soon"
+  "landing": {
+    "nav": {
+      "signIn": "Sign in",
+      "getStarted": "Get started",
+      "dashboard": "My Dashboard"
+    },
+    "hero": {
+      "title": "Your car's service history, always at hand",
+      "description": "Service Book is a simple tool to log and track maintenance records for all your vehicles — oil changes, inspections, repairs, and more.",
+      "cta": "Create free account",
+      "ctaDemo": "See demo",
+      "ctaDashboard": "Go to Dashboard"
+    },
+    "features": {
+      "multipleCars": {
+        "title": "Multiple Cars",
+        "description": "Keep track of all your vehicles in one place."
+      },
+      "serviceRecords": {
+        "title": "Service Records",
+        "description": "Log every oil change, inspection, and repair with date and mileage."
+      },
+      "fullHistory": {
+        "title": "Full History",
+        "description": "See the complete service history of each car at a glance."
+      },
+      "yourData": {
+        "title": "Your Data",
+        "description": "Private and secure — only you can see your records."
+      }
+    },
+    "demo": {
+      "eyebrow": "See for yourself",
+      "title": "Not sure what you're getting?",
+      "description": "Browse a fully working demo with sample car data — service records, maintenance schedule, cost chart. No account needed.",
+      "button": "Open demo →"
+    },
+    "footer": "Service Book — track what matters for your car"
+  },
+  "authLayout": {
+    "backHome": "Back to home"
+  },
+  "login": {
+    "backHome": "Back to home",
+    "title": "Welcome back",
+    "description": "Sign in to your account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "noAccount": "No account?",
+    "registerLink": "Register",
+    "seeDemo": "See a demo first",
+    "error": "Login failed. Please try again."
+  },
+  "register": {
+    "backHome": "Back to home",
+    "title": "Create account",
+    "description": "Start tracking your car service history",
+    "nameLabel": "Name",
+    "namePlaceholder": "John Doe",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordHint": "Minimum 8 characters",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "hasAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "seeDemo": "See a demo first",
+    "error": "Registration failed. Please try again."
+  }
 }
