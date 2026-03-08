@@ -1,6 +1,8 @@
 'use client'
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, Label } from 'recharts'
+import { useTranslations } from 'next-intl'
+import { SERVICE_TYPES } from '@/lib/constants'
 
 type Props = {
   data: { type: string; total: number }[]
@@ -17,16 +19,27 @@ function fmt(n: number) {
 }
 
 export default function CostByTypeChart({ data, total }: Props) {
+  const tPage = useTranslations('carPage')
+  const tTypes = useTranslations('serviceTypes')
+
+  function typeLabel(type: string) {
+    return (SERVICE_TYPES as readonly string[]).includes(type)
+      ? tTypes(type as typeof SERVICE_TYPES[number])
+      : type
+  }
+
+  const translatedData = data.map((d) => ({ ...d, type: typeLabel(d.type) }))
+
   if (data.length === 0) return null
 
   return (
     <div className="rounded-lg border bg-muted/40 p-4 h-full flex flex-col">
-      <p className="text-xs text-muted-foreground mb-3 font-medium">Costs by type</p>
+      <p className="text-xs text-muted-foreground mb-3 font-medium">{tPage('costChartTitle')}</p>
       <div className="flex-1 min-h-45">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={translatedData}
               dataKey="total"
               nameKey="type"
               cx="50%"
@@ -48,7 +61,7 @@ export default function CostByTypeChart({ data, total }: Props) {
                           {fmt(total)}
                         </tspan>
                         <tspan x={cx} y={cy + 10} style={{ fontSize: 10, fill: 'var(--muted-foreground)' }}>
-                          UAH spent
+                          {tPage('costChartSpent')}
                         </tspan>
                       </text>
                     )

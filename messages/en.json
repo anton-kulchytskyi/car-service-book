@@ -88,7 +88,9 @@
   "carPage": {
     "backToCars": "My Cars",
     "serviceHistory": "Service History",
-    "addRecord": "Add Record"
+    "addRecord": "Add Record",
+    "costChartTitle": "Costs by type",
+    "costChartSpent": "UAH spent"
   },
   "newCarPage": {
     "backToCars": "My Cars",
@@ -244,6 +246,24 @@
   },
   "currentMileage": {
     "label": "Current mileage"
+  },
+  "serviceTypes": {
+    "oil_change": "Oil Change",
+    "air_filter": "Air Filter",
+    "cabin_filter": "Cabin Filter",
+    "spark_plugs": "Spark Plugs",
+    "timing_belt": "Timing Belt",
+    "brake_pads": "Brake Pads",
+    "brake_fluid": "Brake Fluid",
+    "coolant_flush": "Coolant Flush",
+    "transmission_fluid": "Transmission Fluid",
+    "power_steering_fluid": "Power Steering Fluid",
+    "tire_rotation": "Tire Rotation",
+    "tire_replacement": "Tire Replacement",
+    "battery_replacement": "Battery Replacement",
+    "technical_inspection": "Technical Inspection",
+    "insurance": "Insurance",
+    "other": "Other"
   },
   "demoPage": {
     "backHome": "Home",

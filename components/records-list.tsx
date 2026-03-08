@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import { SERVICE_TYPES } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import RecordCard from '@/components/cards/record-card'
@@ -19,6 +20,13 @@ const PAGE_SIZE = 10
 
 export default function RecordsList({ records, carId, photosMap }: Props) {
   const t = useTranslations('recordsList')
+  const tTypes = useTranslations('serviceTypes')
+
+  function typeLabel(type: string) {
+    return (SERVICE_TYPES as readonly string[]).includes(type)
+      ? tTypes(type as typeof SERVICE_TYPES[number])
+      : type
+  }
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [dateFrom, setDateFrom] = useState('')
@@ -132,7 +140,7 @@ export default function RecordsList({ records, carId, photosMap }: Props) {
                   : 'bg-muted text-muted-foreground hover:text-foreground'
               }`}
             >
-              {type} ({records.filter((r) => r.type === type).length})
+              {typeLabel(type)} ({records.filter((r) => r.type === type).length})
             </button>
           ))}
         </div>

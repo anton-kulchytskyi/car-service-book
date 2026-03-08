@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
+import type { ServiceType } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -30,6 +31,7 @@ type Props = {
 
 export default function RecordForm({ carId, recordId, defaultValues }: Props) {
   const t = useTranslations('recordForm')
+  const tTypes = useTranslations('serviceTypes')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [isPending, startTransition] = useTransition()
   const [photos, setPhotos] = useState<PhotoItem[]>(defaultValues?.photos ?? [])
@@ -101,8 +103,8 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {SERVICE_TYPES.map((t) => (
-              <SelectItem key={t} value={t}>{t}</SelectItem>
+            {SERVICE_TYPES.map((key) => (
+              <SelectItem key={key} value={key}>{tTypes(key)}</SelectItem>
             ))}
           </SelectContent>
         </Select>

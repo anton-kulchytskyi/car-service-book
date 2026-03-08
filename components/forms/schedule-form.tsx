@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { SERVICE_TYPES, MAINTENANCE_DEFAULTS } from '@/lib/constants'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -13,7 +14,6 @@ import {
   DialogFooter,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { MAINTENANCE_DEFAULTS } from '@/lib/constants'
 import type { MaintenanceSchedule } from '@/lib/db/schema'
 
 type FormValues = {
@@ -31,10 +31,14 @@ type Props = {
   onSaved: () => void
 }
 
-function toFormValues(s?: MaintenanceSchedule): FormValues {
+function toFormValues(
+  s: MaintenanceSchedule | undefined,
+  tTypes: (key: typeof SERVICE_TYPES[number]) => string,
+): FormValues {
   if (!s) return { serviceName: '', intervalKm: '', intervalMonths: '', notes: '' }
+  const isKnown = (SERVICE_TYPES as readonly string[]).includes(s.serviceName)
   return {
-    serviceName: s.serviceName,
+    serviceName: isKnown ? tTypes(s.serviceName as typeof SERVICE_TYPES[number]) : s.serviceName,
     intervalKm: s.intervalKm?.toString() ?? '',
     intervalMonths: s.intervalMonths?.toString() ?? '',
     notes: s.notes ?? '',
@@ -43,7 +47,8 @@ function toFormValues(s?: MaintenanceSchedule): FormValues {
 
 export default function ScheduleForm({ carId, open, onOpenChange, initial, onSaved }: Props) {
   const t = useTranslations('scheduleForm')
-  const [values, setValues] = useState<FormValues>(() => toFormValues(initial))
+  const tTypes = useTranslations('serviceTypes')
+  const [values, setValues] = useState<FormValues>(() => toFormValues(initial, tTypes))
   const [error, setError] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -51,15 +56,21 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
     setValues((v) => ({ ...v, [field]: value }))
   }
 
-  function applyDefault(name: string) {
-    const def = MAINTENANCE_DEFAULTS.find((d) => d.name === name)
+  // When user picks a suggestion (translated name), auto-fill intervals
+  function applyDefault(displayName: string) {
+    const def = MAINTENANCE_DEFAULTS.find((d) => tTypes(d.name) === displayName)
     if (!def) return
     setValues((v) => ({
       ...v,
-      serviceName: def.name,
       intervalKm: def.intervalKm?.toString() ?? '',
       intervalMonths: def.intervalMonths?.toString() ?? '',
     }))
+  }
+
+  // Convert display name back to key for storage, or keep as-is for custom names
+  function resolveServiceKey(displayName: string): string {
+    const def = MAINTENANCE_DEFAULTS.find((d) => tTypes(d.name) === displayName)
+    return def ? def.name : displayName
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -72,7 +83,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
     setIsPending(true)
     try {
       const body = {
-        serviceName: values.serviceName,
+        serviceName: resolveServiceKey(values.serviceName),
         intervalKm: values.intervalKm ? Number(values.intervalKm) : null,
         intervalMonths: values.intervalMonths ? Number(values.intervalMonths) : null,
         notes: values.notes || null,
@@ -95,7 +106,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
   }
 
   function handleOpenChange(o: boolean) {
-    if (o) setValues(toFormValues(initial))
+    if (o) setValues(toFormValues(initial, tTypes))
     setError('')
     onOpenChange(o)
   }
@@ -125,7 +136,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
             />
             <datalist id="maintenance-defaults">
               {MAINTENANCE_DEFAULTS.map((d) => (
-                <option key={d.name} value={d.name} />
+                <option key={d.name} value={tTypes(d.name)} />
               ))}
             </datalist>
             <p className="text-xs text-muted-foreground">

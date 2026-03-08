@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
+import { SERVICE_TYPES } from '@/lib/constants'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -16,43 +17,43 @@ const CURRENT_KM = 87500
 const RECORDS: ServiceRecord[] = [
   {
     id: 'r1', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2025-12-15'), mileage: 87500, type: 'Oil Change',
+    date: new Date('2025-12-15'), mileage: 87500, type: 'oil_change',
     description: 'Castrol Edge 5W-30 5L, replaced oil filter',
     cost: '1800',
   },
   {
     id: 'r2', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2025-10-01'), mileage: 85200, type: 'Tire Replacement',
+    date: new Date('2025-10-01'), mileage: 85200, type: 'tire_replacement',
     description: 'Michelin CrossClimate2 205/55R16 — all four tires',
     cost: '12400',
   },
   {
     id: 'r3', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2025-06-20'), mileage: 82000, type: 'Brake Service',
+    date: new Date('2025-06-20'), mileage: 82000, type: 'brake_pads',
     description: 'Replaced front brake pads and discs',
     cost: '4500',
   },
   {
     id: 'r4', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2025-03-10'), mileage: 78500, type: 'Oil Change',
+    date: new Date('2025-03-10'), mileage: 78500, type: 'oil_change',
     description: 'Castrol Edge 5W-30 5L, replaced oil filter',
     cost: '1800',
   },
   {
     id: 'r5', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2024-11-15'), mileage: 74000, type: 'Filters',
+    date: new Date('2024-11-15'), mileage: 74000, type: 'air_filter',
     description: 'Replaced engine air filter and cabin pollen filter',
     cost: '850',
   },
   {
     id: 'r6', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2024-07-22'), mileage: 70000, type: 'Oil Change',
+    date: new Date('2024-07-22'), mileage: 70000, type: 'oil_change',
     description: 'Castrol Magnatec 5W-30 5L',
     cost: '1750',
   },
   {
     id: 'r7', carId: DEMO_CAR_ID, createdAt: new Date(),
-    date: new Date('2024-01-10'), mileage: 65000, type: 'Technical Inspection',
+    date: new Date('2024-01-10'), mileage: 65000, type: 'technical_inspection',
     description: 'Annual technical inspection — passed',
     cost: '1500',
   },
@@ -61,25 +62,25 @@ const RECORDS: ServiceRecord[] = [
 const SCHEDULES: MaintenanceSchedule[] = [
   {
     id: 's1', carId: DEMO_CAR_ID, createdAt: new Date(), notes: null,
-    serviceName: 'Oil Change',
+    serviceName: 'oil_change',
     intervalKm: 10000, intervalMonths: 6,
     lastDoneKm: 87500, lastDoneDate: new Date('2025-12-15'),
   },
   {
     id: 's2', carId: DEMO_CAR_ID, createdAt: new Date(), notes: null,
-    serviceName: 'Tire Rotation',
+    serviceName: 'tire_rotation',
     intervalKm: 10000, intervalMonths: null,
     lastDoneKm: 85200, lastDoneDate: new Date('2025-10-01'),
   },
   {
     id: 's3', carId: DEMO_CAR_ID, createdAt: new Date(), notes: null,
-    serviceName: 'Air Filter',
+    serviceName: 'air_filter',
     intervalKm: 15000, intervalMonths: 12,
     lastDoneKm: 74000, lastDoneDate: new Date('2024-11-15'),
   },
   {
     id: 's4', carId: DEMO_CAR_ID, createdAt: new Date(), notes: null,
-    serviceName: 'Technical Inspection',
+    serviceName: 'technical_inspection',
     intervalKm: null, intervalMonths: 12,
     lastDoneKm: null, lastDoneDate: new Date('2024-01-10'),
   },
@@ -103,11 +104,11 @@ const OWNERS = [
 ]
 
 const chartData = [
-  { type: 'Tire Replacement', total: 12400 },
-  { type: 'Oil Change', total: 5350 },
-  { type: 'Brake Service', total: 4500 },
-  { type: 'Technical Inspection', total: 1500 },
-  { type: 'Filters', total: 850 },
+  { type: 'tire_replacement', total: 12400 },
+  { type: 'oil_change', total: 5350 },
+  { type: 'brake_pads', total: 4500 },
+  { type: 'technical_inspection', total: 1500 },
+  { type: 'air_filter', total: 850 },
 ]
 const totalCost = chartData.reduce((s, d) => s + d.total, 0)
 
@@ -138,6 +139,13 @@ function nextServiceText(s: MaintenanceSchedule, t: TFn) {
 
 export default async function DemoPage() {
   const t = await getTranslations('demoPage')
+  const tTypes = await getTranslations('serviceTypes')
+
+  function serviceLabel(name: string) {
+    return (SERVICE_TYPES as readonly string[]).includes(name)
+      ? tTypes(name as typeof SERVICE_TYPES[number])
+      : name
+  }
   return (
     <div className="min-h-screen bg-background">
       {/* Demo banner */}
@@ -216,7 +224,7 @@ export default async function DemoPage() {
                         {t(`status${status.charAt(0).toUpperCase() + status.slice(1)}` as 'statusOverdue' | 'statusSoon' | 'statusOk' | 'statusUnknown')}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{s.serviceName}</p>
+                        <p className="font-medium text-sm truncate">{serviceLabel(s.serviceName)}</p>
                         <p className="text-xs text-muted-foreground">{nextServiceText(s, t)}</p>
                       </div>
                     </div>

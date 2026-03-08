@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
+import { SERVICE_TYPES } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -51,6 +52,13 @@ type Props = {
 
 export default function MaintenanceSchedules({ carId, schedules, currentKm }: Props) {
   const t = useTranslations('maintenance')
+  const tTypes = useTranslations('serviceTypes')
+
+  function serviceLabel(name: string) {
+    return (SERVICE_TYPES as readonly string[]).includes(name)
+      ? tTypes(name as typeof SERVICE_TYPES[number])
+      : name
+  }
   const router = useRouter()
   const [addOpen, setAddOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<MaintenanceSchedule | null>(null)
@@ -95,7 +103,7 @@ export default function MaintenanceSchedules({ carId, schedules, currentKm }: Pr
                   {t(`status${status.charAt(0).toUpperCase() + status.slice(1)}` as 'statusOverdue' | 'statusSoon' | 'statusOk' | 'statusUnknown')}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">{s.serviceName}</p>
+                  <p className="font-medium text-sm truncate">{serviceLabel(s.serviceName)}</p>
                   <p className="text-xs text-muted-foreground">{nextServiceText(s, currentKm, t)}</p>
                 </div>
                 <div className="flex gap-1 shrink-0">

@@ -88,7 +88,9 @@
   "carPage": {
     "backToCars": "Мої авто",
     "serviceHistory": "Історія обслуговування",
-    "addRecord": "Додати запис"
+    "addRecord": "Додати запис",
+    "costChartTitle": "Витрати за типом",
+    "costChartSpent": "грн витрачено"
   },
   "newCarPage": {
     "backToCars": "Мої авто",
@@ -244,6 +246,24 @@
   },
   "currentMileage": {
     "label": "Поточний пробіг"
+  },
+  "serviceTypes": {
+    "oil_change": "Заміна масла",
+    "air_filter": "Повітряний фільтр",
+    "cabin_filter": "Салонний фільтр",
+    "spark_plugs": "Свічки запалювання",
+    "timing_belt": "Ремінь ГРМ",
+    "brake_pads": "Гальмівні колодки",
+    "brake_fluid": "Гальмівна рідина",
+    "coolant_flush": "Заміна антифризу",
+    "transmission_fluid": "Трансмісійна рідина",
+    "power_steering_fluid": "Рідина ГПК",
+    "tire_rotation": "Ротація шин",
+    "tire_replacement": "Заміна шин",
+    "battery_replacement": "Заміна акумулятора",
+    "technical_inspection": "Техогляд",
+    "insurance": "Страховка",
+    "other": "Інше"
   },
   "demoPage": {
     "backHome": "На головну",
