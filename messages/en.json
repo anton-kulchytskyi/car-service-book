@@ -90,7 +90,9 @@
     "serviceHistory": "Service History",
     "addRecord": "Add Record",
     "costChartTitle": "Costs by type",
-    "costChartSpent": "UAH spent"
+    "costChartSpent": "UAH spent",
+    "exportPdf": "Export PDF",
+    "generating": "Generating…"
   },
   "newCarPage": {
     "backToCars": "My Cars",
@@ -134,6 +136,7 @@
     "vinLabel": "VIN",
     "photoLabel": "Car Photo",
     "addPhotoLabel": "Add photo",
+    "photoHint": "JPEG, PNG, WebP, HEIC · up to 10 MB",
     "photoError": "Photo upload failed. Please try again.",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
@@ -149,6 +152,7 @@
     "costLabel": "Cost (UAH)",
     "photosLabel": "Photos",
     "photosUploadLabel": "Add photos (receipts, parts, etc.)",
+    "photosHint": "JPEG, PNG, WebP, HEIC · up to 10 MB",
     "photoError": "Photo upload failed. Please try again.",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
@@ -187,6 +191,8 @@
     "loadMore": "Load more ({remaining} remaining)"
   },
   "recordCard": {
+    "km": "km",
+    "currency": "UAH",
     "mileageWarning": "Mileage is lower than the previous record by date",
     "deleteTitle": "Delete service record?",
     "deleteDescription": "This action cannot be undone.",
@@ -220,8 +226,11 @@
     "servicePlaceholder": "e.g. Oil Change",
     "suggestionsNote": "Pick from suggestions to auto-fill intervals",
     "intervalKmLabel": "Every (km)",
+    "intervalKmPlaceholder": "e.g. 10000",
     "intervalMonthsLabel": "Every (months)",
+    "intervalMonthsPlaceholder": "e.g. 6",
     "notesLabel": "Notes (optional)",
+    "notesPlaceholder": "e.g. use 5W-30 Mobil",
     "intervalRequired": "At least one interval (km or months) is required",
     "saveError": "Failed to save. Please try again.",
     "cancel": "Cancel",
@@ -245,20 +254,21 @@
     "deleting": "Deleting…"
   },
   "currentMileage": {
-    "label": "Current mileage"
+    "label": "Current mileage",
+    "km": "km"
   },
   "serviceTypes": {
+    "scheduled_service": "Scheduled Service",
     "oil_change": "Oil Change",
     "air_filter": "Air Filter",
     "cabin_filter": "Cabin Filter",
     "spark_plugs": "Spark Plugs",
     "timing_belt": "Timing Belt",
     "brake_pads": "Brake Pads",
-    "brake_fluid": "Brake Fluid",
-    "coolant_flush": "Coolant Flush",
+    "brake_discs": "Brake Discs",
     "transmission_fluid": "Transmission Fluid",
     "power_steering_fluid": "Power Steering Fluid",
-    "tire_rotation": "Tire Rotation",
+    "wheel_alignment": "Wheel Alignment",
     "tire_replacement": "Tire Replacement",
     "battery_replacement": "Battery Replacement",
     "technical_inspection": "Technical Inspection",
@@ -279,7 +289,15 @@
     "nextInKm": "in {km} km",
     "kmOverdue": "{km} km overdue",
     "nextInDays": "in {days}d",
-    "daysOverdue": "{days}d overdue"
+    "daysOverdue": "{days}d overdue",
+    "km": "km",
+    "desc_r1": "Castrol Edge 5W-30 5L, replaced oil filter",
+    "desc_r2": "Michelin CrossClimate2 205/55R16 — all four tires",
+    "desc_r3": "Replaced front brake pads and discs",
+    "desc_r4": "Castrol Edge 5W-30 5L, replaced oil filter",
+    "desc_r5": "Replaced engine air filter and cabin pollen filter",
+    "desc_r6": "Castrol Magnatec 5W-30 5L",
+    "desc_r7": "Annual technical inspection — passed"
   },
   "ownersPopover": {
     "owner": "{count, plural, one {# owner} other {# owners}}",

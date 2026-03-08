@@ -130,7 +130,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
 
       <div className="grid gap-1.5">
         <Label>{t('photosLabel')}</Label>
-        <PhotoUpload value={photos} onChange={setPhotos} onPendingFiles={setPendingFiles} max={5} label={t('photosUploadLabel')} />
+        <PhotoUpload value={photos} onChange={setPhotos} onPendingFiles={setPendingFiles} max={5} label={t('photosUploadLabel')} hint={t('photosHint')} />
       </div>
 
       <Button type="submit" disabled={isPending} className="mt-2">

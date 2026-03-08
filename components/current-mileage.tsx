@@ -57,7 +57,7 @@ export default function CurrentMileage({ carId, currentMileage }: Props) {
             className="h-7 text-sm w-32"
             autoFocus
           />
-          <span className="text-sm text-muted-foreground">km</span>
+          <span className="text-sm text-muted-foreground">{t('km')}</span>
           <Button size="icon" variant="ghost" className="w-6 h-6" onClick={handleSave} disabled={isPending}>
             <CheckIcon className="w-3.5 h-3.5 text-green-600" />
           </Button>
@@ -69,7 +69,7 @@ export default function CurrentMileage({ carId, currentMileage }: Props) {
         <>
           <div className="flex-1">
             <p className="text-sm font-medium">
-              {currentMileage != null ? `${fmt(currentMileage)} km` : '—'}
+              {currentMileage != null ? `${fmt(currentMileage)} ${t('km')}` : '—'}
             </p>
             <p className="text-xs text-muted-foreground">{t('label')}</p>
           </div>

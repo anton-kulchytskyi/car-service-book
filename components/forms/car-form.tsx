@@ -162,7 +162,7 @@ export default function CarForm({ carId, defaultValues }: Props) {
 
       <div className="grid gap-1.5">
         <Label>{t('photoLabel')}</Label>
-        <PhotoUpload value={photo} onChange={setPhoto} onPendingFiles={setPendingFiles} max={1} label={t('addPhotoLabel')} />
+        <PhotoUpload value={photo} onChange={setPhoto} onPendingFiles={setPendingFiles} max={1} label={t('addPhotoLabel')} hint={t('photoHint')} />
       </div>
 
       <Button type="submit" disabled={isPending || !make || !model} className="mt-2">

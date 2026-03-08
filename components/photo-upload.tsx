@@ -23,7 +23,7 @@ export default function PhotoUpload({
   onPendingFiles,
   max = 5,
   label = 'Add photos',
-  hint = 'JPEG, PNG, WebP, HEIC · up to 10 MB',
+  hint,
 }: Props) {
   const [pending, setPending] = useState<PendingItem[]>([])
   const inputRef = useRef<HTMLInputElement>(null)

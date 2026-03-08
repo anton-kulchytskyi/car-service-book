@@ -152,7 +152,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
                 min="1"
                 value={values.intervalKm}
                 onChange={(e) => set('intervalKm', e.target.value)}
-                placeholder="e.g. 10000"
+                placeholder={t('intervalKmPlaceholder')}
               />
             </div>
             <div className="space-y-1.5">
@@ -162,7 +162,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
                 min="1"
                 value={values.intervalMonths}
                 onChange={(e) => set('intervalMonths', e.target.value)}
-                placeholder="e.g. 6"
+                placeholder={t('intervalMonthsPlaceholder')}
               />
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
             <Input
               value={values.notes}
               onChange={(e) => set('notes', e.target.value)}
-              placeholder="e.g. use 5W-30 Mobil"
+              placeholder={t('notesPlaceholder')}
             />
           </div>
 

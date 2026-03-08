@@ -90,7 +90,9 @@
     "serviceHistory": "Історія обслуговування",
     "addRecord": "Додати запис",
     "costChartTitle": "Витрати за типом",
-    "costChartSpent": "грн витрачено"
+    "costChartSpent": "грн витрачено",
+    "exportPdf": "Експорт в PDF",
+    "generating": "Генерація…"
   },
   "newCarPage": {
     "backToCars": "Мої авто",
@@ -134,6 +136,7 @@
     "vinLabel": "VIN",
     "photoLabel": "Фото авто",
     "addPhotoLabel": "Додати фото",
+    "photoHint": "JPEG, PNG, WebP, HEIC · до 10 МБ",
     "photoError": "Не вдалось завантажити фото. Спробуйте ще раз.",
     "saving": "Збереження...",
     "saveChanges": "Зберегти зміни",
@@ -149,6 +152,7 @@
     "costLabel": "Вартість (грн)",
     "photosLabel": "Фото",
     "photosUploadLabel": "Додати фото (чеки, деталі тощо)",
+    "photosHint": "JPEG, PNG, WebP, HEIC · до 10 МБ",
     "photoError": "Не вдалось завантажити фото. Спробуйте ще раз.",
     "saving": "Збереження...",
     "saveChanges": "Зберегти зміни",
@@ -187,6 +191,8 @@
     "loadMore": "Завантажити більше ({remaining} залишилось)"
   },
   "recordCard": {
+    "km": "км",
+    "currency": "грн",
     "mileageWarning": "Пробіг менший ніж у попередньому записі за датою",
     "deleteTitle": "Видалити запис обслуговування?",
     "deleteDescription": "Цю дію не можна скасувати.",
@@ -220,8 +226,11 @@
     "servicePlaceholder": "наприклад Заміна масла",
     "suggestionsNote": "Оберіть з підказок для автозаповнення інтервалів",
     "intervalKmLabel": "Кожні (км)",
+    "intervalKmPlaceholder": "напр. 10000",
     "intervalMonthsLabel": "Кожні (місяців)",
+    "intervalMonthsPlaceholder": "напр. 6",
     "notesLabel": "Нотатки (необов'язково)",
+    "notesPlaceholder": "напр. 5W-30 Mobil",
     "intervalRequired": "Потрібен хоча б один інтервал (км або місяці)",
     "saveError": "Не вдалось зберегти. Спробуйте ще раз.",
     "cancel": "Скасувати",
@@ -245,20 +254,21 @@
     "deleting": "Видалення…"
   },
   "currentMileage": {
-    "label": "Поточний пробіг"
+    "label": "Поточний пробіг",
+    "km": "км"
   },
   "serviceTypes": {
+    "scheduled_service": "Планове ТО",
     "oil_change": "Заміна масла",
     "air_filter": "Повітряний фільтр",
     "cabin_filter": "Салонний фільтр",
     "spark_plugs": "Свічки запалювання",
     "timing_belt": "Ремінь ГРМ",
     "brake_pads": "Гальмівні колодки",
-    "brake_fluid": "Гальмівна рідина",
-    "coolant_flush": "Заміна антифризу",
+    "brake_discs": "Гальмівні диски",
     "transmission_fluid": "Трансмісійна рідина",
     "power_steering_fluid": "Рідина ГПК",
-    "tire_rotation": "Ротація шин",
+    "wheel_alignment": "Розвал-сходження",
     "tire_replacement": "Заміна шин",
     "battery_replacement": "Заміна акумулятора",
     "technical_inspection": "Техогляд",
@@ -279,7 +289,15 @@
     "nextInKm": "через {km} км",
     "kmOverdue": "{km} км прострочено",
     "nextInDays": "через {days}д",
-    "daysOverdue": "{days}д прострочено"
+    "daysOverdue": "{days}д прострочено",
+    "km": "км",
+    "desc_r1": "Castrol Edge 5W-30 5L, замінено масляний фільтр",
+    "desc_r2": "Michelin CrossClimate2 205/55R16 — всі чотири колеса",
+    "desc_r3": "Замінено передні гальмівні колодки та диски",
+    "desc_r4": "Castrol Edge 5W-30 5L, замінено масляний фільтр",
+    "desc_r5": "Замінено повітряний фільтр двигуна та салонний фільтр",
+    "desc_r6": "Castrol Magnatec 5W-30 5L",
+    "desc_r7": "Щорічний техогляд — пройдено"
   },
   "ownersPopover": {
     "owner": "{count, plural, one {# власник} few {# власники} many {# власників} other {# власників}}",
