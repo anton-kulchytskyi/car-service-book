@@ -1,5 +1,7 @@
-import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { Link } from '@/i18n/navigation'
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { cars, serviceRecords, recordPhotos } from '@/lib/db/schema'
@@ -11,7 +13,7 @@ type Props = { params: Promise<{ id: string; recordId: string }> }
 
 export default async function EditRecordPage({ params }: Props) {
   const session = await getSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${await getLocale()}/login`)
 
   const { id, recordId } = await params
 

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { getSession } from '@/lib/auth/session'
 import { Button } from '@/components/ui/button'
 import ThemeToggle from '@/components/theme-toggle'

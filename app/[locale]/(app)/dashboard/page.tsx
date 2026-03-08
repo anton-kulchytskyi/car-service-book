@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { getLocale } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { eq, count, max, inArray } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { cars, serviceRecords, maintenanceSchedules } from '@/lib/db/schema'
@@ -11,7 +12,7 @@ import { getMaintenanceStatus } from '@/lib/utils'
 
 export default async function DashboardPage() {
   const session = await getSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${await getLocale()}/login`)
 
   const userCars = await db
     .select()

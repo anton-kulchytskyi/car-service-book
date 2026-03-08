@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { getLocale } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
@@ -11,10 +12,10 @@ import DeleteAccountButton from '@/components/delete-account-button'
 
 export default async function ProfilePage() {
   const session = await getSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${await getLocale()}/login`)
 
   const [user] = await db.select().from(users).where(eq(users.id, session.sub)).limit(1)
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   return (
     <div className="max-w-lg mx-auto">

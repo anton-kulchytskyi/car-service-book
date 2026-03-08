@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { CarIcon, UserIcon } from 'lucide-react'
 import LogoutButton from './logout-button'
 import ThemeToggle from './theme-toggle'

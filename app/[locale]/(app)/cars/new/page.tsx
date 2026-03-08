@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowLeftIcon } from 'lucide-react'
 import CarForm from '@/components/forms/car-form'
 
