@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { and, eq } from 'drizzle-orm'
@@ -25,6 +25,7 @@ export default async function EditRecordPage({ params }: Props) {
     .limit(1)
 
   if (!result) notFound()
+  const t = await getTranslations('editRecordPage')
 
   const photos = await db
     .select({ url: recordPhotos.url, publicId: recordPhotos.publicId })
@@ -38,9 +39,9 @@ export default async function EditRecordPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        {result.car.make} {result.car.model}
+        {t('back')}
       </Link>
-      <h1 className="text-2xl font-bold mb-6">Edit Record</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
       <RecordForm
         carId={id}
         recordId={recordId}

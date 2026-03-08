@@ -15,7 +15,7 @@ export default function LocaleSwitcher() {
         <button
           key={l}
           onClick={() => router.replace(pathname, { locale: l })}
-          className={`px-2.5 py-1 uppercase transition-colors ${
+          className={`px-2.5 py-1 uppercase transition-colors cursor-pointer ${
             locale === l
               ? 'bg-primary text-primary-foreground'
               : 'text-muted-foreground hover:text-foreground'

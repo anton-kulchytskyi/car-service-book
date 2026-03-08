@@ -18,7 +18,7 @@ export default function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      className="text-muted-foreground hover:text-foreground"
+      className="text-muted-foreground hover:text-foreground cursor-pointer"
     >
       {resolvedTheme === 'dark' ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
     </Button>

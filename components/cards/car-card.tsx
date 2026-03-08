@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/navigation'
+import { getTranslations } from 'next-intl/server'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ChevronRightIcon, ClipboardListIcon, CalendarIcon, AlertTriangleIcon } from 'lucide-react'
@@ -18,7 +19,8 @@ function formatLastDate(date: Date | null) {
   return new Intl.DateTimeFormat('uk-UA', { month: 'short', year: 'numeric' }).format(new Date(date))
 }
 
-export default function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
+export default async function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
+  const t = await getTranslations('carCard')
   const overdueCount = stats?.overdueCount ?? 0
   const soonCount = stats?.soonCount ?? 0
 
@@ -46,7 +48,7 @@ export default function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <ClipboardListIcon className="w-3 h-3" />
-              {stats?.recordCount ?? 0} records
+              {t('records', { count: stats?.recordCount ?? 0 })}
             </span>
             {stats?.lastDate && (
               <span className="flex items-center gap-1">
@@ -60,12 +62,12 @@ export default function CarCard({ car, stats }: { car: Car; stats?: Stats }) {
               {overdueCount > 0 && (
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-destructive bg-destructive/10 border border-destructive/20 rounded px-2 py-0.5">
                   <AlertTriangleIcon className="w-3 h-3" />
-                  {overdueCount} overdue
+                  {t('overdue', { count: overdueCount })}
                 </span>
               )}
               {soonCount > 0 && (
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-0.5 dark:text-amber-400 dark:bg-amber-950/30 dark:border-amber-800">
-                  {soonCount} due soon
+                  {t('dueSoon', { count: soonCount })}
                 </span>
               )}
             </div>

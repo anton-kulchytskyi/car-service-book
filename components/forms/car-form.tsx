@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -29,6 +30,7 @@ type Props = {
 }
 
 export default function CarForm({ carId, defaultValues }: Props) {
+  const t = useTranslations('carForm')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [isPending, startTransition] = useTransition()
   const [make, setMake] = useState(defaultValues?.make ?? '')
@@ -77,7 +79,7 @@ export default function CarForm({ carId, defaultValues }: Props) {
           const newItems = await uploadFiles(pendingFiles)
           uploaded = [...photo, ...newItems]
         } catch {
-          setFieldErrors({ _: ['Photo upload failed. Please try again.'] })
+          setFieldErrors({ _: [t('photoError')] })
           return
         }
       }
@@ -103,31 +105,31 @@ export default function CarForm({ carId, defaultValues }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-1.5">
-          <Label>Make *</Label>
+          <Label>{t('makeLabel')}</Label>
           <Combobox
             options={CAR_MAKES}
             value={make}
             onChange={handleMakeChange}
-            placeholder="Toyota"
-            searchPlaceholder="Search make..."
+            placeholder={t('makePlaceholder')}
+            searchPlaceholder={t('makeSearchPlaceholder')}
           />
           {fieldErrors.make && <p className="text-sm text-destructive">{fieldErrors.make[0]}</p>}
         </div>
         <div className="grid gap-1.5">
-          <Label>Model *</Label>
+          <Label>{t('modelLabel')}</Label>
           <Combobox
             options={modelOptions}
             value={model}
             onChange={setModel}
-            placeholder={modelOptions.length ? 'Select model' : 'Type model'}
-            searchPlaceholder="Search model..."
+            placeholder={modelOptions.length ? t('modelSelectPlaceholder') : t('modelTypePlaceholder')}
+            searchPlaceholder={t('modelSearchPlaceholder')}
           />
           {fieldErrors.model && <p className="text-sm text-destructive">{fieldErrors.model[0]}</p>}
         </div>
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="year">Year *</Label>
+        <Label htmlFor="year">{t('yearLabel')}</Label>
         <Input
           id="year"
           name="year"
@@ -142,7 +144,7 @@ export default function CarForm({ carId, defaultValues }: Props) {
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="licensePlate">License Plate</Label>
+        <Label htmlFor="licensePlate">{t('licensePlateLabel')}</Label>
         <Input
           id="licensePlate"
           name="licensePlate"
@@ -154,17 +156,17 @@ export default function CarForm({ carId, defaultValues }: Props) {
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="vin">VIN</Label>
+        <Label htmlFor="vin">{t('vinLabel')}</Label>
         <Input id="vin" name="vin" placeholder="1HGBH41JXMN109186" className="font-mono uppercase" defaultValue={defaultValues?.vin ?? ''} />
       </div>
 
       <div className="grid gap-1.5">
-        <Label>Car Photo</Label>
-        <PhotoUpload value={photo} onChange={setPhoto} onPendingFiles={setPendingFiles} max={1} label="Add photo" />
+        <Label>{t('photoLabel')}</Label>
+        <PhotoUpload value={photo} onChange={setPhoto} onPendingFiles={setPendingFiles} max={1} label={t('addPhotoLabel')} />
       </div>
 
       <Button type="submit" disabled={isPending || !make || !model} className="mt-2">
-        {isPending ? 'Saving...' : isEdit ? 'Save Changes' : 'Add Car'}
+        {isPending ? t('saving') : isEdit ? t('saveChanges') : t('addCar')}
       </Button>
     </form>
   )

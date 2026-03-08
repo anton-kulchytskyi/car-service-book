@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -28,6 +29,7 @@ type Props = {
 }
 
 export default function RecordForm({ carId, recordId, defaultValues }: Props) {
+  const t = useTranslations('recordForm')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [isPending, startTransition] = useTransition()
   const [photos, setPhotos] = useState<PhotoItem[]>(defaultValues?.photos ?? [])
@@ -63,7 +65,7 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
           const newItems = await uploadFiles(pendingFiles)
           allPhotos = [...photos, ...newItems]
         } catch {
-          setFieldErrors({ _: ['Photo upload failed. Please try again.'] })
+          setFieldErrors({ _: [t('photoError')] })
           return
         }
       }
@@ -87,13 +89,13 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="grid gap-1.5">
-        <Label htmlFor="date">Date *</Label>
+        <Label htmlFor="date">{t('dateLabel')}</Label>
         <Input id="date" name="date" type="date" defaultValue={defaultDate} max={today} required />
         {fieldErrors.date && <p className="text-sm text-destructive">{fieldErrors.date[0]}</p>}
       </div>
 
       <div className="grid gap-1.5">
-        <Label>Service Type *</Label>
+        <Label>{t('typeLabel')}</Label>
         <Select value={type} onValueChange={setType}>
           <SelectTrigger>
             <SelectValue />
@@ -108,29 +110,29 @@ export default function RecordForm({ carId, recordId, defaultValues }: Props) {
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="mileage">Mileage (km) *</Label>
-        <Input id="mileage" name="mileage" type="number" placeholder="50000" min={0} defaultValue={defaultValues?.mileage} required />
+        <Label htmlFor="mileage">{t('mileageLabel')}</Label>
+        <Input id="mileage" name="mileage" type="number" placeholder={t('mileagePlaceholder')} min={0} defaultValue={defaultValues?.mileage} required />
         {fieldErrors.mileage && <p className="text-sm text-destructive">{fieldErrors.mileage[0]}</p>}
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="description">Description *</Label>
-        <Input id="description" name="description" placeholder="Changed engine oil and filter" defaultValue={defaultValues?.description} required />
+        <Label htmlFor="description">{t('descriptionLabel')}</Label>
+        <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} defaultValue={defaultValues?.description} required />
         {fieldErrors.description && <p className="text-sm text-destructive">{fieldErrors.description[0]}</p>}
       </div>
 
       <div className="grid gap-1.5">
-        <Label htmlFor="cost">Cost (UAH)</Label>
+        <Label htmlFor="cost">{t('costLabel')}</Label>
         <Input id="cost" name="cost" type="number" step="0.01" placeholder="1500.00" min={0} defaultValue={defaultValues?.cost ?? ''} />
       </div>
 
       <div className="grid gap-1.5">
-        <Label>Photos</Label>
-        <PhotoUpload value={photos} onChange={setPhotos} onPendingFiles={setPendingFiles} max={5} label="Add photos (receipts, parts, etc.)" />
+        <Label>{t('photosLabel')}</Label>
+        <PhotoUpload value={photos} onChange={setPhotos} onPendingFiles={setPendingFiles} max={5} label={t('photosUploadLabel')} />
       </div>
 
       <Button type="submit" disabled={isPending} className="mt-2">
-        {isPending ? 'Saving...' : isEdit ? 'Save Changes' : 'Add Record'}
+        {isPending ? t('saving') : isEdit ? t('saveChanges') : t('addRecord')}
       </Button>
     </form>
   )

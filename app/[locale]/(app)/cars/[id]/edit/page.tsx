@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { and, eq } from 'drizzle-orm'
@@ -24,6 +24,7 @@ export default async function EditCarPage({ params }: Props) {
     .limit(1)
 
   if (!car) notFound()
+  const t = await getTranslations('editCarPage')
 
   return (
     <div className="max-w-lg mx-auto">
@@ -32,9 +33,9 @@ export default async function EditCarPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        {car.make} {car.model}
+        {t('back')}
       </Link>
-      <h1 className="text-2xl font-bold mb-6">Edit Car</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
       <CarForm carId={id} defaultValues={car} />
     </div>
   )

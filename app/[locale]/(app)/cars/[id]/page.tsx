@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { and, eq, desc, asc } from 'drizzle-orm'
@@ -26,6 +26,7 @@ type Props = { params: Promise<{ id: string }> }
 export default async function CarPage({ params }: Props) {
   const session = await getSession()
   if (!session) redirect(`/${await getLocale()}/login`)
+  const t = await getTranslations('carPage')
 
   const { id } = await params
 
@@ -72,7 +73,7 @@ export default async function CarPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        My Cars
+        {t('backToCars')}
       </Link>
 
       {/* Header: car info (left) + chart (right) */}
@@ -129,7 +130,7 @@ export default async function CarPage({ params }: Props) {
         {/* Service History — order-2 on mobile (bottom), order-1 on desktop (left) */}
         <div className="order-2 lg:order-1">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Service History</h2>
+            <h2 className="text-lg font-semibold">{t('serviceHistory')}</h2>
             <div className="flex gap-2">
               <ExportPdfButton
                 car={car}
@@ -141,7 +142,7 @@ export default async function CarPage({ params }: Props) {
               <Button asChild size="sm">
                 <Link href={`/cars/${id}/records/new`}>
                   <PlusIcon className="w-4 h-4 mr-1" />
-                  Add Record
+                  {t('addRecord')}
                 </Link>
               </Button>
             </div>

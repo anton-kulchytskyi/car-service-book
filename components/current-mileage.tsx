@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { GaugeIcon, PencilIcon, CheckIcon, XIcon } from 'lucide-react'
@@ -12,6 +13,7 @@ type Props = {
 }
 
 export default function CurrentMileage({ carId, currentMileage }: Props) {
+  const t = useTranslations('currentMileage')
   const [editing, setEditing] = useState(false)
   const [value, setValue] = useState(currentMileage?.toString() ?? '')
   const [isPending, setIsPending] = useState(false)
@@ -69,7 +71,7 @@ export default function CurrentMileage({ carId, currentMileage }: Props) {
             <p className="text-sm font-medium">
               {currentMileage != null ? `${fmt(currentMileage)} km` : '—'}
             </p>
-            <p className="text-xs text-muted-foreground">Current mileage</p>
+            <p className="text-xs text-muted-foreground">{t('label')}</p>
           </div>
           <Button size="icon" variant="ghost" className="w-6 h-6" onClick={() => setEditing(true)}>
             <PencilIcon className="w-3.5 h-3.5 text-muted-foreground" />

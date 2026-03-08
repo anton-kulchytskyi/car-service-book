@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,6 +18,7 @@ type Props = {
 const PAGE_SIZE = 10
 
 export default function RecordsList({ records, carId, photosMap }: Props) {
+  const t = useTranslations('recordsList')
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [dateFrom, setDateFrom] = useState('')
@@ -60,10 +62,10 @@ export default function RecordsList({ records, carId, photosMap }: Props) {
     return (
       <div className="flex flex-col items-center justify-center py-14 text-center text-muted-foreground">
         <ClipboardListIcon className="w-10 h-10 mb-3 opacity-30" />
-        <p className="font-medium mb-1">No records yet</p>
-        <p className="text-sm mb-5">Start tracking service history for this car</p>
+        <p className="font-medium mb-1">{t('emptyTitle')}</p>
+        <p className="text-sm mb-5">{t('emptyDescription')}</p>
         <Button asChild variant="outline" size="sm">
-          <Link href={`/cars/${carId}/records/new`}>Add first record</Link>
+          <Link href={`/cars/${carId}/records/new`}>{t('emptyAction')}</Link>
         </Button>
       </div>
     )
@@ -95,7 +97,7 @@ export default function RecordsList({ records, carId, photosMap }: Props) {
         <Input
           value={search}
           onChange={(e) => { setSearch(e.target.value); resetVisible() }}
-          placeholder="Search by type or description..."
+          placeholder={t('searchPlaceholder')}
           className="pl-9 pr-9"
         />
         {search && (
@@ -118,7 +120,7 @@ export default function RecordsList({ records, carId, photosMap }: Props) {
                 : 'bg-muted text-muted-foreground hover:text-foreground'
             }`}
           >
-            All ({records.length})
+            {t('all')} ({records.length})
           </button>
           {types.map((type) => (
             <button
@@ -138,19 +140,19 @@ export default function RecordsList({ records, carId, photosMap }: Props) {
 
       {hasFilters && (
         <div className="flex items-center justify-between mb-3">
-          <p className="text-xs text-muted-foreground">{filtered.length} of {records.length} records</p>
+          <p className="text-xs text-muted-foreground">{t('ofRecords', { filtered: filtered.length, total: records.length })}</p>
           <button
             onClick={() => { setSearch(''); setDateFrom(''); setDateTo(''); setActiveFilter(null); resetVisible() }}
             className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
           >
-            Clear all
+            {t('clearAll')}
           </button>
         </div>
       )}
 
       {filtered.length === 0 ? (
         <p className="text-center py-10 text-sm text-muted-foreground">
-          No records found{query ? ` for "${search}"` : activeFilter ? ` for "${activeFilter}"` : ''}
+          {query ? t('noResultsFor', { query: search }) : t('noResults')}
         </p>
       ) : (
         <>
@@ -164,7 +166,7 @@ export default function RecordsList({ records, carId, photosMap }: Props) {
               onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
               className="mt-4 w-full py-2 text-sm text-muted-foreground hover:text-foreground border border-dashed rounded-lg transition-colors"
             >
-              Load more ({filtered.length - visibleCount} remaining)
+              {t('loadMore', { remaining: filtered.length - visibleCount })}
             </button>
           )}
         </>

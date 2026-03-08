@@ -1,4 +1,36 @@
 {
+  "authLayout": {
+    "backHome": "Back to home"
+  },
+  "login": {
+    "title": "Welcome back",
+    "description": "Sign in to your account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "noAccount": "No account?",
+    "registerLink": "Register",
+    "seeDemo": "See a demo first",
+    "error": "Login failed. Please try again."
+  },
+  "register": {
+    "title": "Create account",
+    "description": "Start tracking your car service history",
+    "nameLabel": "Name",
+    "namePlaceholder": "John Doe",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordHint": "Minimum 8 characters",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "hasAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "seeDemo": "See a demo first",
+    "error": "Registration failed. Please try again."
+  },
   "landing": {
     "nav": {
       "signIn": "Sign in",
@@ -38,38 +70,179 @@
     },
     "footer": "Service Book — track what matters for your car"
   },
-  "authLayout": {
-    "backHome": "Back to home"
+  "header": {
+    "logout": "Logout"
   },
-  "login": {
-    "backHome": "Back to home",
-    "title": "Welcome back",
-    "description": "Sign in to your account",
-    "emailLabel": "Email",
-    "emailPlaceholder": "you@example.com",
-    "passwordLabel": "Password",
-    "submit": "Sign in",
-    "submitting": "Signing in...",
-    "noAccount": "No account?",
-    "registerLink": "Register",
-    "seeDemo": "See a demo first",
-    "error": "Login failed. Please try again."
+  "dashboard": {
+    "title": "My Cars",
+    "addCar": "Add Car",
+    "emptyTitle": "No cars yet",
+    "emptyDescription": "Add your first car to start tracking service history",
+    "emptyAction": "Add your first car"
   },
-  "register": {
-    "backHome": "Back to home",
-    "title": "Create account",
-    "description": "Start tracking your car service history",
+  "carCard": {
+    "records": "{count} records",
+    "overdue": "{count} overdue",
+    "dueSoon": "{count} due soon"
+  },
+  "carPage": {
+    "backToCars": "My Cars",
+    "serviceHistory": "Service History",
+    "addRecord": "Add Record"
+  },
+  "newCarPage": {
+    "backToCars": "My Cars",
+    "title": "Add Car"
+  },
+  "editCarPage": {
+    "back": "Back",
+    "title": "Edit Car"
+  },
+  "newRecordPage": {
+    "back": "Back",
+    "title": "Add Record"
+  },
+  "editRecordPage": {
+    "back": "Back",
+    "title": "Edit Record"
+  },
+  "profilePage": {
+    "backToDashboard": "Dashboard",
+    "title": "Profile",
+    "dangerZone": "Danger zone",
+    "dangerDescription": "Deleting your account will permanently remove all your cars and service records. This action cannot be undone."
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go home",
+    "dashboard": "My Dashboard"
+  },
+  "carForm": {
+    "makeLabel": "Make *",
+    "makePlaceholder": "Toyota",
+    "makeSearchPlaceholder": "Search make...",
+    "modelLabel": "Model *",
+    "modelSelectPlaceholder": "Select model",
+    "modelTypePlaceholder": "Type model",
+    "modelSearchPlaceholder": "Search model...",
+    "yearLabel": "Year *",
+    "licensePlateLabel": "License Plate",
+    "vinLabel": "VIN",
+    "photoLabel": "Car Photo",
+    "addPhotoLabel": "Add photo",
+    "photoError": "Photo upload failed. Please try again.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "addCar": "Add Car"
+  },
+  "recordForm": {
+    "dateLabel": "Date *",
+    "typeLabel": "Service Type *",
+    "mileageLabel": "Mileage (km) *",
+    "mileagePlaceholder": "50000",
+    "descriptionLabel": "Description *",
+    "descriptionPlaceholder": "Changed engine oil and filter",
+    "costLabel": "Cost (UAH)",
+    "photosLabel": "Photos",
+    "photosUploadLabel": "Add photos (receipts, parts, etc.)",
+    "photoError": "Photo upload failed. Please try again.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "addRecord": "Add Record"
+  },
+  "profileForm": {
+    "nameTitle": "Display name",
     "nameLabel": "Name",
-    "namePlaceholder": "John Doe",
-    "emailLabel": "Email",
-    "emailPlaceholder": "you@example.com",
-    "passwordLabel": "Password",
+    "nameError": "Failed to update name. Please try again.",
+    "nameSuccess": "Name updated successfully.",
+    "saveName": "Save name",
+    "saving": "Saving...",
+    "passwordTitle": "Change password",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
     "passwordHint": "Minimum 8 characters",
-    "submit": "Create account",
-    "submitting": "Creating account...",
-    "hasAccount": "Already have an account?",
-    "signInLink": "Sign in",
-    "seeDemo": "See a demo first",
-    "error": "Registration failed. Please try again."
+    "passwordError": "Failed to update password. Please try again.",
+    "passwordSuccess": "Password updated successfully.",
+    "updatePassword": "Update password"
+  },
+  "deleteAccount": {
+    "confirm": "Are you sure you want to delete your account?\n\nThis will permanently delete all your cars and service records. This action cannot be undone.",
+    "button": "Delete my account",
+    "deleting": "Deleting..."
+  },
+  "recordsList": {
+    "emptyTitle": "No records yet",
+    "emptyDescription": "Start tracking service history for this car",
+    "emptyAction": "Add first record",
+    "searchPlaceholder": "Search by type or description...",
+    "all": "All",
+    "clearAll": "Clear all",
+    "ofRecords": "{filtered} of {total} records",
+    "noResults": "No records found",
+    "noResultsFor": "No records found for \"{query}\"",
+    "loadMore": "Load more ({remaining} remaining)"
+  },
+  "recordCard": {
+    "mileageWarning": "Mileage is lower than the previous record by date",
+    "deleteTitle": "Delete service record?",
+    "deleteDescription": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  },
+  "maintenance": {
+    "title": "Maintenance Schedule",
+    "add": "Add",
+    "empty": "No maintenance schedules yet. Add one to track when services are due.",
+    "statusOverdue": "Overdue",
+    "statusSoon": "Due soon",
+    "statusOk": "OK",
+    "statusUnknown": "No data",
+    "nextInKm": "in {km} km",
+    "kmOverdue": "{km} km overdue",
+    "nextInDays": "in {days}d",
+    "daysOverdue": "{days}d overdue",
+    "deleteTitle": "Delete schedule?",
+    "deleteDescription": "\"{name}\" will be removed. This cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  },
+  "scheduleForm": {
+    "addTitle": "Add Maintenance Schedule",
+    "editTitle": "Edit Maintenance Schedule",
+    "syncNote": "Last done date and mileage are synced automatically from your service history.",
+    "serviceLabel": "Service",
+    "servicePlaceholder": "e.g. Oil Change",
+    "suggestionsNote": "Pick from suggestions to auto-fill intervals",
+    "intervalKmLabel": "Every (km)",
+    "intervalMonthsLabel": "Every (months)",
+    "notesLabel": "Notes (optional)",
+    "intervalRequired": "At least one interval (km or months) is required",
+    "saveError": "Failed to save. Please try again.",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
+  },
+  "carActionsMenu": {
+    "editCar": "Edit car",
+    "transferOwnership": "Transfer ownership",
+    "deleteCar": "Delete car",
+    "transferTitle": "Transfer Car Ownership",
+    "transferNote": "The car will be permanently transferred to the new owner. You will lose access to it.",
+    "newOwnerEmail": "New owner's email",
+    "transferring": "Transferring…",
+    "transfer": "Transfer",
+    "transferError": "Something went wrong",
+    "deleteTitle": "Delete this car?",
+    "deleteNote": "All service records, maintenance schedules and photos will be permanently deleted. This cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting…"
+  },
+  "currentMileage": {
+    "label": "Current mileage"
   }
 }

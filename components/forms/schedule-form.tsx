@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -41,6 +42,7 @@ function toFormValues(s?: MaintenanceSchedule): FormValues {
 }
 
 export default function ScheduleForm({ carId, open, onOpenChange, initial, onSaved }: Props) {
+  const t = useTranslations('scheduleForm')
   const [values, setValues] = useState<FormValues>(() => toFormValues(initial))
   const [error, setError] = useState('')
   const [isPending, setIsPending] = useState(false)
@@ -63,7 +65,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!values.intervalKm && !values.intervalMonths) {
-      setError('At least one interval (km or months) is required')
+      setError(t('intervalRequired'))
       return
     }
     setError('')
@@ -81,7 +83,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
         : await fetch(`/api/cars/${carId}/schedules`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
 
       if (!res.ok) {
-        setError('Failed to save. Please try again.')
+        setError(t('saveError'))
         return
       }
 
@@ -102,22 +104,22 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{initial ? 'Edit Maintenance Schedule' : 'Add Maintenance Schedule'}</DialogTitle>
+          <DialogTitle>{initial ? t('editTitle') : t('addTitle')}</DialogTitle>
           <DialogDescription>
-            Last done date and mileage are synced automatically from your service history.
+            {t('syncNote')}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Service</Label>
+            <Label>{t('serviceLabel')}</Label>
             <Input
               value={values.serviceName}
               onChange={(e) => {
                 set('serviceName', e.target.value)
                 applyDefault(e.target.value)
               }}
-              placeholder="e.g. Oil Change"
+              placeholder={t('servicePlaceholder')}
               required
               list="maintenance-defaults"
             />
@@ -127,13 +129,13 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
               ))}
             </datalist>
             <p className="text-xs text-muted-foreground">
-              Pick from suggestions to auto-fill intervals
+              {t('suggestionsNote')}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Every (km)</Label>
+              <Label>{t('intervalKmLabel')}</Label>
               <Input
                 type="number"
                 min="1"
@@ -143,7 +145,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
               />
             </div>
             <div className="space-y-1.5">
-              <Label>Every (months)</Label>
+              <Label>{t('intervalMonthsLabel')}</Label>
               <Input
                 type="number"
                 min="1"
@@ -155,7 +157,7 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
           </div>
 
           <div className="space-y-1.5">
-            <Label>Notes (optional)</Label>
+            <Label>{t('notesLabel')}</Label>
             <Input
               value={values.notes}
               onChange={(e) => set('notes', e.target.value)}
@@ -167,10 +169,10 @@ export default function ScheduleForm({ carId, open, onOpenChange, initial, onSav
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} disabled={isPending}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button type="submit" disabled={isPending}>
-              {isPending ? 'Saving...' : 'Save'}
+              {isPending ? t('saving') : t('save')}
             </Button>
           </DialogFooter>
         </form>

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -28,6 +29,7 @@ type Props = {
 }
 
 export default function RecordCard({ record, carId, mileageWarning, photos }: Props) {
+  const t = useTranslations('recordCard')
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const router = useRouter()
@@ -69,7 +71,7 @@ export default function RecordCard({ record, carId, mileageWarning, photos }: Pr
                         <TriangleAlertIcon className="w-4 h-4 text-amber-500 fill-amber-100 cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent>
-                        Mileage is lower than the previous record by date
+                        {t('mileageWarning')}
                       </TooltipContent>
                     </Tooltip>
                   )}
@@ -121,13 +123,13 @@ export default function RecordCard({ record, carId, mileageWarning, photos }: Pr
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete service record?</DialogTitle>
-            <DialogDescription>This action cannot be undone.</DialogDescription>
+            <DialogTitle>{t('deleteTitle')}</DialogTitle>
+            <DialogDescription>{t('deleteDescription')}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={isPending}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={isPending}>{t('cancel')}</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
-              {isPending ? 'Deleting...' : 'Delete'}
+              {isPending ? t('deleting') : t('delete')}
             </Button>
           </DialogFooter>
         </DialogContent>
