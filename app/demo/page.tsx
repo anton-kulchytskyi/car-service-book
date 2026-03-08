@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import RecordsList from '@/components/records-list'
 import CostByTypeChart from '@/components/charts/cost-by-type-chart-wrapper'
 import OwnersPopover from '@/components/owners-popover'
-import { GaugeIcon, SparklesIcon } from 'lucide-react'
+import { GaugeIcon, SparklesIcon, ArrowLeftIcon } from 'lucide-react'
 import { getMaintenanceStatus } from '@/lib/utils'
 import type { ServiceRecord, MaintenanceSchedule } from '@/lib/db/schema'
 
@@ -139,9 +139,15 @@ export default function DemoPage() {
       {/* Demo banner */}
       <div className="bg-primary text-primary-foreground py-3 px-4">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <SparklesIcon className="w-4 h-4 shrink-0" />
-            This is a demo — explore the app before signing up
+          <div className="flex items-center gap-3">
+            <Link href="/" className="inline-flex items-center gap-1 text-sm text-primary-foreground/70 hover:text-primary-foreground">
+              <ArrowLeftIcon className="w-4 h-4" />
+              Home
+            </Link>
+            <span className="flex items-center gap-1.5 text-sm font-medium">
+              <SparklesIcon className="w-4 h-4 shrink-0" />
+              This is a demo — explore the app before signing up
+            </span>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <Button size="sm" variant="secondary" asChild>

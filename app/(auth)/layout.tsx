@@ -1,7 +1,19 @@
+import Link from 'next/link'
+import { ArrowLeftIcon } from 'lucide-react'
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40 px-4">
-      <div className="w-full max-w-sm">{children}</div>
+      <div className="w-full max-w-sm">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
+        >
+          <ArrowLeftIcon className="w-4 h-4" />
+          Back to home
+        </Link>
+        {children}
+      </div>
     </div>
   )
 }
